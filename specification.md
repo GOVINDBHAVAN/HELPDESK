@@ -220,16 +220,19 @@ Fill in your answers directly below each question. Leave blank if unknown/TBD.
 ## 11. Tech Stack (if already decided)
 
 **11.1** Frontend: React
-> Answer:
+> Answer: React with typescript, Tailwind CSS, React Router
 
 **11.2** Backend: ASP.NET Core
-> Answer:
+> Answer: ASP.NET Core, JWT for authentication, Entity Framwork core, Rest API.
 
 **11.3** Database: Postgresql
-> Answer:
+> Answer: Postgresql
 
 **11.4** Hosting / deployment target:
-> Answer:
+> Answer: Docker and cloud deployment later.
+
+**11.5** Email:
+> Answer: Gmail (personal account for testing) for outbound replies and inbound webhooks.
 
 ---
 
