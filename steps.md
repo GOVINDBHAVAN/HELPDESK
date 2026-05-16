@@ -2,11 +2,11 @@
 
 ## Before start development Framework
 
-1. Define the scope
-2. Clarify the requirements
+1. Define the scope - @project-scope.md
+2. Clarify the requirements - @specification.md
 3. Define the MVP
-4. Choose the tech stack
-5. Create the implementation plan (what do we build first, second and so on)
+4. Choose the tech stack - @tech-stack.md
+5. Create the implementation plan (what do we build first, second and so on) - @implementation-plan.md
 
 ## Scaffolding (Define the scope)
 
@@ -18,4 +18,11 @@
 - Prompt: Review and Suggest tech stack for this project (Claude has already created this question in the specification), in this course, the author is using express. We'll try to use ASP.NET CORE, play with Claude prompt to create tech-stack.md file and review.
 - Review the specification again to plan development priority, suppose user management can be developed later, first develop the project core requirement ticket management.
 - Prompt: Create an implementation plan, break the project into small tasks and group them in phases.
+- Prompt (DID NOT COMPLETED LATER TO CHECK THIS): check for testing the mail functionality locally without external smtp provider, check for locally smtp fake provider which can provide incoming/outgoing webhooks which can replicate the production grade email providers to test this functionality locally and also support front-end to do email compose or view mails locally, dummy mails
+- Review the implementation-plan and remove the steps which are not to be execute.
+
+
+## Implementation of project
+
+- Create a full stack project as per @specification.md and implement phase 0.
 - 
