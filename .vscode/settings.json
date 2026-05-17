@@ -1,0 +1,52 @@
+{
+  "chat.tools.terminal.autoApprove": {
+    "/^node --version ; npm --version$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^mkdir backend && cd backend && dotnet new web -o Helpdesk\\.Api --no-https && dotnet new sln -n Helpdesk && cd Helpdesk\\.Api && dotnet sln \\.\\.\\\\Helpdesk\\.sln add Helpdesk\\.Api\\.csproj && dotnet add package Microsoft\\.EntityFrameworkCore\\.Design && dotnet add package Npgsql\\.EntityFrameworkCore\\.PostgreSQL && dotnet add package Microsoft\\.AspNetCore\\.Identity\\.EntityFrameworkCore && dotnet add package Microsoft\\.AspNetCore\\.Authentication\\.JwtBearer && cd /d d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK && npm create vite@latest frontend -- --template react-ts$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^mkdir backend; cd backend; dotnet new web -o Helpdesk\\.Api --no-https; dotnet new sln -n Helpdesk; cd Helpdesk\\.Api; dotnet sln \\.\\.\\\\Helpdesk\\.sln add Helpdesk\\.Api\\.csproj; dotnet add package Microsoft\\.EntityFrameworkCore\\.Design; dotnet add package Npgsql\\.EntityFrameworkCore\\.PostgreSQL; dotnet add package Microsoft\\.AspNetCore\\.Identity\\.EntityFrameworkCore; dotnet add package Microsoft\\.AspNetCore\\.Authentication\\.JwtBearer; cd /d d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK; npm create vite@latest frontend -- --template react-ts$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^pwd; cd /d d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK; pwd; Get-ChildItem -Name; Test-Path backend; Test-Path frontend$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^Set-Location 'd:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK'; Get-ChildItem -Name; Get-ChildItem backend -Name; Test-Path frontend; if \\(Test-Path frontend\\) \\{ Get-ChildItem frontend -Name \\}$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^dotnet new sln -n Helpdesk; dotnet sln add backend\\\\Helpdesk\\.Api\\\\Helpdesk\\.Api\\.csproj; dotnet restore backend\\\\Helpdesk\\.Api\\\\Helpdesk\\.Api\\.csproj; dotnet build backend\\\\Helpdesk\\.Api\\\\Helpdesk\\.Api\\.csproj -c Release$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^dotnet restore backend\\\\Helpdesk\\.Api\\\\Helpdesk\\.Api\\.csproj; dotnet build backend\\\\Helpdesk\\.Api\\\\Helpdesk\\.Api\\.csproj -c Release$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^cd /d d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\frontend; npm install$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^Set-Location 'd:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\frontend'; npm install$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^cd /d d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK; dotnet restore backend\\\\Helpdesk\\.Api\\\\Helpdesk\\.Api\\.csproj; dotnet build backend\\\\Helpdesk\\.Api\\\\Helpdesk\\.Api\\.csproj -c Release$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^Set-Location 'd:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK'; dotnet restore backend\\\\Helpdesk\\.Api\\\\Helpdesk\\.Api\\.csproj; dotnet build backend\\\\Helpdesk\\.Api\\\\Helpdesk\\.Api\\.csproj -c Release$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^Set-Location 'd:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK'; dotnet sln backend\\\\Helpdesk\\.slnx add backend\\\\Helpdesk\\.Api\\\\Helpdesk\\.Api\\.csproj$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
+  }
+}
