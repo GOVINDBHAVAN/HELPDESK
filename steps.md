@@ -19,7 +19,7 @@
 - Review the specification again to plan development priority, suppose user management can be developed later, first develop the project core requirement ticket management.
 - Prompt: Create an implementation plan, break the project into small tasks and group them in phases.
 - Prompt (DID NOT COMPLETED LATER TO CHECK THIS): check for testing the mail functionality locally without external smtp provider, check for locally smtp fake provider which can provide incoming/outgoing webhooks which can replicate the production grade email providers to test this functionality locally and also support front-end to do email compose or view mails locally, dummy mails
-- Review the implementation-plan and remove the steps which are not to be execute.
+- Review the implementation-plan and remove the steps which are not to be execute. Do not proceed with suggested implementation plan. We can remove user management at the initial stage and prioritize other core ticket management functionalities (as per business prioritizes)
 
 
 ## Implementation of project
