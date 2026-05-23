@@ -39,3 +39,13 @@
 - ensure that this @CLAUDE.md contains reference of all my existing md files like @implementation-plan.md @tech-stack.md  @specification.md and @project-scope.md
 - # for this project do not need Prisma in this project.Prisma is an ORM for Node.js/TypeScript backends. Your backend is ASP.NET Core with EF Core, which is the .NET equivalent
 - the postgresql is creating the table names in Pascal case which is creating problem when querying the data table, setup the mapping and skill that it should adhere the postgres naming conventions
+- # No, you don't need better-auth. better-auth is a JavaScript/TypeScript auth library — it only works in Node.js backends. Your backend is ASP.NET Core, which already has ASP.NET Identity built in and configured in this project. It handles
+- TODO: Check for authentication middleware in the react application to ensure that authentication is used.
+- # instead of installing better-auth, here we'll use standard react-router-dom for managing authentication.
+- install the react-router-dom and protect the front-end react-app routes and pages/components with best practices
+- create a new users in the backend api application in development stage with username (email): test@test.com and password: REDACTED
+- # curl -s -X POST http://localhost:5000/api/auth/register -H "Content-Type: application/json" -d "{\"displayName\":\"Test User\",\"email\":\"test@test.com\",\"password\":\"REDACTED\"}" | cat
+- # check if not working then let claude code to fix this and restart the application.
+- create a new api in the backend api: "/api/me" which returns the current user logged-in and the token
+- 
+

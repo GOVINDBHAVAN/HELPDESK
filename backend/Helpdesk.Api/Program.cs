@@ -148,6 +148,20 @@ app.MapPost("/api/auth/login", async (LoginRequest request, UserManager<Applicat
     });
 }).AllowAnonymous();
 
+app.MapGet("/api/me", (ClaimsPrincipal principal, HttpContext httpContext) =>
+{
+    var userId = principal.FindFirstValue(JwtRegisteredClaimNames.Sub);
+    var email = principal.FindFirstValue(JwtRegisteredClaimNames.Email);
+    var token = httpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+
+    return Results.Ok(new
+    {
+        UserId = userId,
+        Email = email,
+        Token = token
+    });
+}).RequireAuthorization();
+
 app.MapGet("/api/tickets", async (HelpdeskDbContext db) =>
 {
     var tickets = await db.Tickets
