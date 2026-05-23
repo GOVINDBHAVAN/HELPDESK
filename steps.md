@@ -35,4 +35,5 @@
 - in the client app, in app component, write code to call the healthcheck api and display a message.
 - Create a shell command to run both first the dotnet server app and after that client react app, so that I can run them to test the application.
 - # run ./dev.ps1 and check both app are working, if required fix the issue with claude code.
+- create the project memory file claude.md. add context7 to fetch up-to-date documentation
 - 
