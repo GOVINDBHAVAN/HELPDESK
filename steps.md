@@ -47,5 +47,8 @@
 - # curl -s -X POST http://localhost:5000/api/auth/register -H "Content-Type: application/json" -d "{\"displayName\":\"Test User\",\"email\":\"test@test.com\",\"password\":\"REDACTED\"}" | cat
 - # check if not working then let claude code to fix this and restart the application.
 - create a new api in the backend api: "/api/me" which returns the current user logged-in and the token
+- # we'll create the user from backend with super-admin logins to create other new users so disable the signup page.
+- disable the signup endpoint, we'll create the new users/agent from the super admin user created in the system from backend. New users should not be able to signup them self
+- Create the seed script to populate the database with an admin user, a user can be an admin or an agent. email: admin@example.com password: REDACTED store email and password in an enviornment variable.
 - 
 
