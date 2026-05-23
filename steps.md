@@ -8,6 +8,10 @@
 4. Choose the tech stack - @tech-stack.md
 5. Create the implementation plan (what do we build first, second and so on) - @implementation-plan.md
 
+## Notes for Claude
+
+- #do not update step.md file using Claude Code, it's my internal file which is used to prepare the notes of developing the application.
+
 ## Scaffolding (Define the scope)
 
 - Create `project-scope.md` of scope of work, before creating anything even before /init command. Add these sections (##Problem, ##Solution, ##Features)
@@ -25,4 +29,10 @@
 ## Implementation of project
 
 - Create a full stack project as per @specification.md and implement phase 0.
+- Use context7 for up-to-date documentation.
+- Tried to install docker images: Configure PostgreSQL, Redis, and attachment storage: during implementation of phase 0, it was not completed: Configure PostgreSQL, Redis, and attachment storage
+- create the docker images and containers on my local docker-desktop
+- in the client app, in app component, write code to call the healthcheck api and display a message.
+- Create a shell command to run both first the dotnet server app and after that client react app, so that I can run them to test the application.
+- # run ./dev.ps1 and check both app are working, if required fix the issue with claude code.
 - 

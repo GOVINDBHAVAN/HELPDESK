@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /b \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\")",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(dotnet add *)",
+      "Bash(dotnet build *)",
+      "Bash(docker info *)",
+      "Bash(docker compose *)",
+      "Bash(curl -s http://localhost:5000/api/health)"
+    ]
+  }
+}

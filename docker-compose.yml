@@ -34,14 +34,20 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:5000
       ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=helpdesk_dev;Username=postgres;Password=postgres
+      ConnectionStrings__Redis: redis:6379
+      AttachmentStorage__Provider: local
+      AttachmentStorage__LocalPath: /app/uploads
       JwtSettings__Issuer: Helpdesk
       JwtSettings__Audience: Helpdesk
       JwtSettings__Secret: SuperSecretLocalDevKey123!
       JwtSettings__ExpiryMinutes: '480'
     ports:
       - '5000:5000'
+    volumes:
+      - uploads_data:/app/uploads
     depends_on:
       - postgres
+      - redis
       - mailpit
 
   frontend:
@@ -58,3 +64,4 @@ services:
 
 volumes:
   postgres_data:
+  uploads_data:
