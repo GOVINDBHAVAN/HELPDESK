@@ -41,6 +41,15 @@ Three roles defined in the system: `Admin`, `Agent`, `Student`.
 - Frontend: `npm run dev` from `frontend/` (runs on Vite default port)
 - Backend runs on `http://localhost:5000`
 
+## Project Documents
+
+| File | Purpose |
+|------|---------|
+| [project-scope.md](project-scope.md) | Problem statement, solution summary, and feature list |
+| [specification.md](specification.md) | Detailed requirements Q&A — email ingestion, AI behaviour, roles, SLA, compliance, tech stack |
+| [tech-stack.md](tech-stack.md) | Chosen technologies with rationale — backend, frontend, DB, cache, email, AI, DevOps |
+| [implementation-plan.md](implementation-plan.md) | Phased delivery plan with sprint breakdown |
+
 ## Implementation Phases
 
 See [implementation-plan.md](implementation-plan.md) for the full breakdown:
