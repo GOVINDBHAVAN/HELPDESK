@@ -72,15 +72,36 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<HelpdeskDbContext>();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
     db.Database.EnsureCreated();
 
     foreach (var role in new[] { "Admin", "Agent", "Student" })
     {
         if (!await roleManager.RoleExistsAsync(role))
-        {
             await roleManager.CreateAsync(new IdentityRole(role));
-        }
+    }
+
+    var adminEmail = builder.Configuration["Seed:AdminEmail"]
+        ?? throw new InvalidOperationException("Seed:AdminEmail is not configured.");
+    var adminPassword = builder.Configuration["Seed:AdminPassword"]
+        ?? throw new InvalidOperationException("Seed:AdminPassword is not configured.");
+
+    if (await userManager.FindByEmailAsync(adminEmail) is null)
+    {
+        var adminUser = new ApplicationUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            DisplayName = "Admin",
+            EmailConfirmed = true
+        };
+        var result = await userManager.CreateAsync(adminUser, adminPassword);
+        if (!result.Succeeded)
+            throw new InvalidOperationException(
+                $"Failed to seed admin user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+
+        await userManager.AddToRoleAsync(adminUser, "Admin");
     }
 }
 
@@ -123,7 +144,7 @@ app.MapPost("/api/auth/register", async (RegisterRequest request, UserManager<Ap
 
     await userManager.AddToRoleAsync(user, "Agent");
     return Results.Created($"/api/auth/register/{user.Id}", new { user.Id, user.Email });
-}).AllowAnonymous();
+}).RequireAuthorization(policy => policy.RequireRole("Admin"));
 
 app.MapPost("/api/auth/login", async (LoginRequest request, UserManager<ApplicationUser> userManager) =>
 {
