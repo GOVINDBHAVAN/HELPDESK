@@ -4,10 +4,12 @@ using System.Text;
 using Helpdesk.Api.Data;
 using Helpdesk.Api.Entities;
 using Helpdesk.Api.Models;
+using Helpdesk.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,13 @@ builder.WebHost.UseUrls("http://0.0.0.0:5000");
 
 builder.Services.AddDbContext<HelpdeskDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
+builder.Services.AddSingleton<IConnectionMultiplexer>(
+    ConnectionMultiplexer.Connect(redisConnectionString));
+
+builder.Services.Configure<StorageSettings>(builder.Configuration.GetSection("AttachmentStorage"));
+builder.Services.AddSingleton<IStorageService, LocalStorageService>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {

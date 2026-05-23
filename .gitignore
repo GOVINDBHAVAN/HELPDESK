@@ -38,3 +38,6 @@ Thumbs.db
 # Docker
 **/docker-compose.override.yml
 **/.dockerignore
+
+# Local attachment uploads
+backend/Helpdesk.Api/uploads/
