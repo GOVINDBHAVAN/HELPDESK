@@ -8,7 +8,10 @@
       "Bash(dotnet build *)",
       "Bash(docker info *)",
       "Bash(docker compose *)",
-      "Bash(curl -s http://localhost:5000/api/health)"
+      "Bash(curl -s http://localhost:5000/api/health)",
+      "Bash(PGPASSWORD=postgres psql -h localhost -p 5432 -U postgres -c \"DROP DATABASE IF EXISTS helpdesk_dev;\")",
+      "PowerShell($env:PGPASSWORD = \"postgres\"; & psql -h localhost -p 5432 -U postgres -c \"DROP DATABASE IF EXISTS helpdesk_dev;\")",
+      "Read(//c/Program Files/**)"
     ]
   }
 }

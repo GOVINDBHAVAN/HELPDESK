@@ -36,4 +36,6 @@
 - Create a shell command to run both first the dotnet server app and after that client react app, so that I can run them to test the application.
 - # run ./dev.ps1 and check both app are working, if required fix the issue with claude code.
 - create the project memory file claude.md. add context7 to fetch up-to-date documentation
-- 
+- ensure that this @CLAUDE.md contains reference of all my existing md files like @implementation-plan.md @tech-stack.md  @specification.md and @project-scope.md
+- # for this project do not need Prisma in this project.Prisma is an ORM for Node.js/TypeScript backends. Your backend is ASP.NET Core with EF Core, which is the .NET equivalent
+- the postgresql is creating the table names in Pascal case which is creating problem when querying the data table, setup the mapping and skill that it should adhere the postgres naming conventions
