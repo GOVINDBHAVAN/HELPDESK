@@ -76,7 +76,7 @@ using (var scope = app.Services.CreateScope())
 
     db.Database.EnsureCreated();
 
-    foreach (var role in new[] { "Admin", "Agent", "Student" })
+    foreach (var role in Enum.GetNames<UserRole>())
     {
         if (!await roleManager.RoleExistsAsync(role))
             await roleManager.CreateAsync(new IdentityRole(role));
@@ -101,7 +101,29 @@ using (var scope = app.Services.CreateScope())
             throw new InvalidOperationException(
                 $"Failed to seed admin user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
 
-        await userManager.AddToRoleAsync(adminUser, "Admin");
+        await userManager.AddToRoleAsync(adminUser, nameof(UserRole.Admin));
+    }
+
+    var agentEmail = builder.Configuration["Seed:AgentEmail"]
+        ?? throw new InvalidOperationException("Seed:AgentEmail is not configured.");
+    var agentPassword = builder.Configuration["Seed:AgentPassword"]
+        ?? throw new InvalidOperationException("Seed:AgentPassword is not configured.");
+
+    if (await userManager.FindByEmailAsync(agentEmail) is null)
+    {
+        var agentUser = new ApplicationUser
+        {
+            UserName = agentEmail,
+            Email = agentEmail,
+            DisplayName = "Agent",
+            EmailConfirmed = true
+        };
+        var result = await userManager.CreateAsync(agentUser, agentPassword);
+        if (!result.Succeeded)
+            throw new InvalidOperationException(
+                $"Failed to seed agent user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+
+        await userManager.AddToRoleAsync(agentUser, nameof(UserRole.Agent));
     }
 }
 
@@ -142,9 +164,9 @@ app.MapPost("/api/auth/register", async (RegisterRequest request, UserManager<Ap
         return Results.BadRequest(result.Errors.Select(e => e.Description));
     }
 
-    await userManager.AddToRoleAsync(user, "Agent");
+    await userManager.AddToRoleAsync(user, nameof(UserRole.Agent));
     return Results.Created($"/api/auth/register/{user.Id}", new { user.Id, user.Email });
-}).RequireAuthorization(policy => policy.RequireRole("Admin"));
+}).RequireAuthorization(policy => policy.RequireRole(nameof(UserRole.Admin)));
 
 app.MapPost("/api/auth/login", async (LoginRequest request, UserManager<ApplicationUser> userManager) =>
 {
