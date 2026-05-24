@@ -1,4 +1,5 @@
 {
+  "css.lint.unknownAtRules": "ignore",
   "chat.tools.terminal.autoApprove": {
     "/^node --version ; npm --version$/": {
       "approve": true,

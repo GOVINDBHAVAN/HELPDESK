@@ -76,4 +76,17 @@
 
 - # to use reusable components instead of repeating tailwind css on every elements.
 - install shadcn and use the default theme.
+- remove chrome's autofill style applied to input fields.
+
+## Creating User pages
+
+- create a page at /users with just a heading, make it accessible only to admins.
+- add a link to the users page in the nav for admins.
+
+## Create a security audit sub-agent
+
+- #/agents : Create new agent.
+- review the codebase for security vulnerability
+- # rename agent file name to: security-reviewer.md
+- use the security-reviewer agent to review my code, specifically focusing on authentication and authorization.
 - 

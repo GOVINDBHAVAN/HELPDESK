@@ -182,7 +182,8 @@ app.MapPost("/api/auth/login", async (LoginRequest request, UserManager<Applicat
         return Results.Unauthorized();
     }
 
-    var token = GenerateJwtToken(user, jwtSettings);
+    var roles = await userManager.GetRolesAsync(user);
+    var token = GenerateJwtToken(user, roles, jwtSettings);
     return Results.Ok(new AuthResponse
     {
         Token = token,
@@ -259,7 +260,7 @@ app.MapPost("/api/tickets", async (CreateTicketRequest request, HelpdeskDbContex
 
 app.Run();
 
-string GenerateJwtToken(ApplicationUser user, JwtSettings settings)
+string GenerateJwtToken(ApplicationUser user, IList<string> roles, JwtSettings settings)
 {
     var claims = new List<Claim>
     {
@@ -267,6 +268,9 @@ string GenerateJwtToken(ApplicationUser user, JwtSettings settings)
         new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
         new Claim(ClaimTypes.Name, user.UserName ?? string.Empty)
     };
+
+    foreach (var role in roles)
+        claims.Add(new Claim("role", role));
 
     var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
     var tokenDescriptor = new JwtSecurityToken(

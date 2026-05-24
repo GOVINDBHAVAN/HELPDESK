@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 interface User {
   id: string
   email: string
+  role: string
 }
 
 interface AuthContextType {
@@ -18,7 +19,7 @@ const TOKEN_KEY = 'helpdesk_token'
 function parseToken(token: string): User | null {
   try {
     const payload = JSON.parse(atob(token.split('.')[1]))
-    return { id: payload.sub, email: payload.email }
+    return { id: payload.sub, email: payload.email, role: payload.role ?? '' }
   } catch {
     return null
   }
