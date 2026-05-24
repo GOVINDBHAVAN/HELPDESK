@@ -65,4 +65,9 @@
 - if a field is invalid, show a red border around that field.
 - implement this red border pattern throughout this front-end application, add that in the skill field.
 - bug: if we provide an invalid email, zod validation error is not displayed.
+
+
+## Implementing tailwind
+
+- install tailwind and use it on all pages, remove all custom css code.
 - 

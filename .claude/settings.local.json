@@ -14,7 +14,8 @@
       "Read(//c/Program Files/**)",
       "Bash(npm install *)",
       "Bash(npm run *)",
-      "Bash(curl -s -X POST http://localhost:5000/api/auth/register -H \"Content-Type: application/json\" -d \"{\\\\\"displayName\\\\\":\\\\\"Test User\\\\\",\\\\\"email\\\\\":\\\\\"test@test.com\\\\\",\\\\\"password\\\\\":\\\\\"Password@123\\\\\"}\")"
+      "Bash(curl -s -X POST http://localhost:5000/api/auth/register -H \"Content-Type: application/json\" -d \"{\\\\\"displayName\\\\\":\\\\\"Test User\\\\\",\\\\\"email\\\\\":\\\\\"test@test.com\\\\\",\\\\\"password\\\\\":\\\\\"Password@123\\\\\"}\")",
+      "Bash(del \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\frontend\\\\src\\\\App.css\")"
     ]
   }
 }
