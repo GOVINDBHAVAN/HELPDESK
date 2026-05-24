@@ -16,6 +16,11 @@ export function Navbar() {
         Helpdesk
       </Link>
       <div className="flex items-center gap-4">
+        {user?.role === 'Admin' && (
+          <Link to="/users" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            Users
+          </Link>
+        )}
         <span className="text-sm text-muted-foreground">{user?.email}</span>
         <button
           onClick={handleSignOut}

@@ -1,10 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthContext'
 import { ProtectedRoute } from './auth/ProtectedRoute'
+import { AdminRoute } from './auth/AdminRoute'
 import { AppLayout } from './layouts/AppLayout'
 import { LoginPage } from './pages/LoginPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { TicketsPage } from './pages/TicketsPage'
+import { UsersPage } from './pages/UsersPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 function App() {
@@ -19,6 +21,9 @@ function App() {
               <Route element={<AppLayout />}>
                 <Route path="/" element={<DashboardPage />} />
                 <Route path="/tickets" element={<TicketsPage />} />
+                <Route element={<AdminRoute />}>
+                  <Route path="/users" element={<UsersPage />} />
+                </Route>
               </Route>
             </Route>
 
