@@ -70,4 +70,10 @@
 ## Implementing tailwind
 
 - install tailwind and use it on all pages, remove all custom css code.
+
+
+## Implementing shadcn
+
+- # to use reusable components instead of repeating tailwind css on every elements.
+- install shadcn and use the default theme.
 - 

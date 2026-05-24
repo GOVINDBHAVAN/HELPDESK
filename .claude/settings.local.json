@@ -15,7 +15,10 @@
       "Bash(npm install *)",
       "Bash(npm run *)",
       "Bash(curl -s -X POST http://localhost:5000/api/auth/register -H \"Content-Type: application/json\" -d \"{\\\\\"displayName\\\\\":\\\\\"Test User\\\\\",\\\\\"email\\\\\":\\\\\"test@test.com\\\\\",\\\\\"password\\\\\":\\\\\"Password@123\\\\\"}\")",
-      "Bash(del \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\frontend\\\\src\\\\App.css\")"
+      "Bash(del \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\frontend\\\\src\\\\App.css\")",
+      "Bash(npx shadcn@latest init -d)",
+      "Bash(rm \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\frontend\\\\components.json\")",
+      "Bash(npx shadcn@4.7.0 init -d)"
     ]
   }
 }
