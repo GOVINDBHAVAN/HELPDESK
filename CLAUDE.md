@@ -81,3 +81,6 @@ mcp__context7__query-docs(library_id, "migrations add-migration")
 - JWT secret and connection strings go in `appsettings.Development.json` (not committed)
 - Frontend has no routing or state management libraries yet — add React Router and React Query as Phase 1 begins
 - **All enums are stored as text in the database** — use `.HasConversion<string>()` in `OnModelCreating` for every enum property (e.g. `TicketStatus`, `TicketPriority`, `TicketCategory`)
+- **All forms use React Hook Form + Zod** — define a `z.object` schema, pass it via `zodResolver`, and spread `{...register('field')}` onto inputs. Never use uncontrolled `useState` for form fields.
+- **Invalid form fields show a red border** — apply `className={errors.field ? 'input-error' : undefined}` on every `<input>`, `<textarea>`, and `<select>`. The `.input-error` CSS class (and its `:focus` override) is defined in `App.css`.
+- **Email inputs use `type="text"`, not `type="email"`** — `type="email"` triggers browser-native validation that intercepts submit before RHF runs, so Zod errors never surface. Use `type="text"` with `autoComplete="email"` and let `z.string().email()` handle format validation.

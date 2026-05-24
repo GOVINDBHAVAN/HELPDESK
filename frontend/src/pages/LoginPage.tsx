@@ -1,69 +1,75 @@
-import { useState } from 'react'
-import type { FormEvent } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+
+const loginSchema = z.object({
+  email: z.string().email('Enter a valid email address'),
+  password: z.string().min(1, 'Password is required'),
+})
+
+type LoginFormData = z.infer<typeof loginSchema>
 
 export function LoginPage() {
   const { login, token } = useAuth()
   const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<LoginFormData>({ resolver: zodResolver(loginSchema) })
 
   if (token) return <Navigate to="/" replace />
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
+  async function onSubmit(data: LoginFormData) {
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(data),
       })
       if (!res.ok) {
-        setError('Invalid email or password.')
+        setError('root', { message: 'Invalid email or password.' })
         return
       }
       const { token } = await res.json()
       login(token)
       navigate('/', { replace: true })
     } catch {
-      setError('Network error. Please try again.')
-    } finally {
-      setLoading(false)
+      setError('root', { message: 'Network error. Please try again.' })
     }
   }
 
   return (
     <main className="login-page">
       <h1>Sign in to Helpdesk</h1>
-      <form onSubmit={handleSubmit} className="login-form">
+      <form onSubmit={handleSubmit(onSubmit)} className="login-form">
         <label>
           Email
           <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
             autoComplete="email"
-            required
+            className={errors.email ? 'input-error' : undefined}
+            {...register('email')}
           />
+          {errors.email && <p role="alert" className="error">{errors.email.message}</p>}
         </label>
         <label>
           Password
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
-            required
+            className={errors.password ? 'input-error' : undefined}
+            {...register('password')}
           />
+          {errors.password && <p role="alert" className="error">{errors.password.message}</p>}
         </label>
-        {error && <p role="alert" className="error">{error}</p>}
-        <button type="submit" disabled={loading}>
-          {loading ? 'Signing in…' : 'Sign in'}
+        {errors.root && <p role="alert" className="error">{errors.root.message}</p>}
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
     </main>

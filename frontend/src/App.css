@@ -109,6 +109,15 @@
   box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
+.login-form input.input-error {
+  border-color: #dc2626;
+}
+
+.login-form input.input-error:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
 .login-form button[type='submit'] {
   width: 100%;
   padding: 11px;

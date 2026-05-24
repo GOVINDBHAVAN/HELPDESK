@@ -58,4 +58,11 @@
 ## Creating the login page
 
 - build the login page, when the user logs in, redirect them to the home page and show the user's name in the nav bar along with a sign out button.
+- Review the code changes and commit.
+- # Implement react-hook-form for better validation with zod.
+- use react hook form with zod.
+- # implement red-border if there is a validation
+- if a field is invalid, show a red border around that field.
+- implement this red border pattern throughout this front-end application, add that in the skill field.
+- bug: if we provide an invalid email, zod validation error is not displayed.
 - 
