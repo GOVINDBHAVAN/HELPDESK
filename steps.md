@@ -51,5 +51,11 @@
 - disable the signup endpoint, we'll create the new users/agent from the super admin user created in the system from backend. New users should not be able to signup them self
 - Create the seed script to populate the database with an admin user, a user can be an admin or an agent. email: admin@example.com password: Password@123 store email and password in an enviornment variable.
 - Create the seed script to populate the database with an agent user, email: agent@example.com password: Password@123
-- define an enum for the role 
+- define an enum for the role
+- The status enum is stored as integer in the database, change all the enum to stored as text at database level, update that in the skill of this project for future reference.
+- 
 
+## Creating the login page
+
+- build the login page, when the user logs in, redirect them to the home page and show the user's name in the nav bar along with a sign out button.
+- 
