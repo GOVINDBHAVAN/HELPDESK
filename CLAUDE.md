@@ -80,3 +80,4 @@ mcp__context7__query-docs(library_id, "migrations add-migration")
 - No EF Core migrations yet — `db.Database.EnsureCreated()` is used in dev
 - JWT secret and connection strings go in `appsettings.Development.json` (not committed)
 - Frontend has no routing or state management libraries yet — add React Router and React Query as Phase 1 begins
+- **All enums are stored as text in the database** — use `.HasConversion<string>()` in `OnModelCreating` for every enum property (e.g. `TicketStatus`, `TicketPriority`, `TicketCategory`)

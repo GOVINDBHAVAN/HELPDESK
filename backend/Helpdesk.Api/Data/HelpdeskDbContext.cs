@@ -24,6 +24,9 @@ public class HelpdeskDbContext : IdentityDbContext<ApplicationUser>
             entity.Property(t => t.StudentEmail).IsRequired().HasMaxLength(320);
             entity.Property(t => t.CreatedAt).HasDefaultValueSql("now()");
             entity.Property(t => t.UpdatedAt).HasDefaultValueSql("now()");
+            entity.Property(t => t.Status).HasConversion<string>();
+            entity.Property(t => t.Priority).HasConversion<string>();
+            entity.Property(t => t.Category).HasConversion<string>();
         });
     }
 }

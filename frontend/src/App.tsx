@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import './App.css'
 import { AuthProvider } from './auth/AuthContext'
 import { ProtectedRoute } from './auth/ProtectedRoute'
+import { AppLayout } from './layouts/AppLayout'
 import { LoginPage } from './pages/LoginPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { TicketsPage } from './pages/TicketsPage'
@@ -13,10 +15,11 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
 
-          {/* All routes inside here require authentication */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/tickets" element={<TicketsPage />} />
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/tickets" element={<TicketsPage />} />
+            </Route>
           </Route>
 
           <Route path="*" element={<NotFoundPage />} />
