@@ -18,7 +18,10 @@
       "Bash(del \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\frontend\\\\src\\\\App.css\")",
       "Bash(npx shadcn@latest init -d)",
       "Bash(rm \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\frontend\\\\components.json\")",
-      "Bash(npx shadcn@4.7.0 init -d)"
+      "Bash(npx shadcn@4.7.0 init -d)",
+      "Bash(rm filter-replacements.txt)",
+      "Bash(git remote *)",
+      "Bash(git push *)"
     ]
   }
 }
