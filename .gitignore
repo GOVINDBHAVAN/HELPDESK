@@ -41,3 +41,6 @@ Thumbs.db
 
 # Local attachment uploads
 backend/Helpdesk.Api/uploads/
+
+# ASP.NET Core local secrets (contains DB credentials, JWT secret, seed passwords)
+backend/Helpdesk.Api/appsettings.Development.json
