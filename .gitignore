@@ -44,3 +44,10 @@ backend/Helpdesk.Api/uploads/
 
 # ASP.NET Core local secrets (contains DB credentials, JWT secret, seed passwords)
 backend/Helpdesk.Api/appsettings.Development.json
+backend/Helpdesk.Api/appsettings.Testing.json
+
+# Playwright
+e2e/node_modules/
+e2e/test-results/
+e2e/playwright-report/
+e2e/.auth/

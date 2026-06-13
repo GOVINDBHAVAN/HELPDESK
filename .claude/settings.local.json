@@ -21,7 +21,8 @@
       "Bash(npx shadcn@4.7.0 init -d)",
       "Bash(rm filter-replacements.txt)",
       "Bash(git remote *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "PowerShell($env:PGPASSWORD = 'postgres'; & \"psql\" -U postgres -d helpdesk_test -c \"\\\\dt\" 2>&1)"
     ]
   }
 }

@@ -89,4 +89,16 @@
 - review the codebase for security vulnerability
 - # rename agent file name to: security-reviewer.md
 - use the security-reviewer agent to review my code, specifically focusing on authentication and authorization.
+- # as per video, create openssl key : 'On my windows, generate base64 random key just like we can do on MacOS: openssl rand -base64' but it is not used in this project
+- fix the critical first
+- commit to github and can we also remove the previously committed @backend/Helpdesk.Api/appsettings.json to be overwritten with this one?
+
+## End-to-end testing with Playwright
+- set up playwright with a separate database for testing. Don't write any tests, just do the setup and configuration.
+- # run: .\e2e\ > npm run test:ui
+- # my own prompt for running playwright:
+- I ran cd npx playwright install but it didn't create the test database on the postgresql.
+- drop and re-create the helpdesk_test and create the users everytime with seed whenever I run the project of playwright for testing.
+- I ran npm run test:ui it created the database but tables are not created.
+- update project memory
 - 
