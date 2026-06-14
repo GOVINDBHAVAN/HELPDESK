@@ -63,9 +63,9 @@ Do NOT rely on training data for Playwright API syntax — APIs change between v
 ### Form Testing (React Hook Form + Zod)
 The project uses React Hook Form + Zod for all forms. When testing forms:
 - Test both valid submission path and validation error display
-- Verify red border appears on invalid fields: `border-red-500` class
+- Verify red border appears on invalid fields — error state classes: `border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-100`; valid state classes: `border-gray-200 focus:border-violet-500 focus:ring-2 focus:ring-violet-100`. See `LoginPage.tsx` for the `inputBase`/`inputValid`/`inputError` constants pattern.
 - Test that Zod error messages appear below invalid fields
-- **Email fields use `type="text"` not `type="email"`** — do not expect browser validation; expect Zod errors
+- **Email fields use `type="text"` not `type="email"`** — browser-native validation intercepts submit before RHF runs when `type="email"` is used, so Zod errors never surface. Use `autoComplete="email"` and expect Zod errors, not browser validation popups.
 - Use `locator.fill()` to enter values, then `locator.click()` submit button
 
 ### UI Component Awareness

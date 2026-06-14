@@ -59,6 +59,16 @@ See [implementation-plan.md](implementation-plan.md) for the full breakdown:
 - **Phase 3**: notifications, routing, SLA, dashboard/reporting
 - **Phase 4**: QA, security hardening, deployment
 
+## Testing
+
+Use the **`playwright-e2e-writer` agent** for all end-to-end test writing — do not write Playwright tests inline. Trigger it after implementing any UI feature or API endpoint:
+
+```
+Agent({ subagent_type: "playwright-e2e-writer", ... })
+```
+
+The agent knows the project's e2e setup (globalSetup architecture, `helpdesk_test` DB, storage state per role, IPv4 gotcha, etc.) and maintains its own memory across conversations.
+
 ## Documentation
 
 Use the **context7 MCP server** for all library and framework documentation lookups — do not rely on training data for API syntax or configuration. This covers:
@@ -83,5 +93,3 @@ mcp__context7__query-docs(library_id, "migrations add-migration")
 - **All enums are stored as text in the database** — use `.HasConversion<string>()` in `OnModelCreating` for every enum property (e.g. `TicketStatus`, `TicketPriority`, `TicketCategory`)
 - **UI components use shadcn/ui** — run `npx shadcn@latest add <component>` from `frontend/` to add components; they land in `src/components/ui/`. Use the `cn()` helper from `@/lib/utils` for conditional class merging. Use shadcn semantic color tokens (`bg-background`, `text-foreground`, `text-muted-foreground`, `bg-primary`, `text-destructive`, `border-border`, etc.) — never hardcode Tailwind gray/color values directly.
 - **All forms use React Hook Form + Zod** — define a `z.object` schema, pass it via `zodResolver`, and spread `{...register('field')}` onto inputs. Never use uncontrolled `useState` for form fields.
-- **Invalid form fields show a red border** — use conditional Tailwind classes on every `<input>`, `<textarea>`, and `<select>`: apply `border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-100` when the field has an error, and `border-gray-200 focus:border-violet-500 focus:ring-2 focus:ring-violet-100` otherwise. See `LoginPage.tsx` for the `inputBase`/`inputValid`/`inputError` constants pattern.
-- **Email inputs use `type="text"`, not `type="email"`** — `type="email"` triggers browser-native validation that intercepts submit before RHF runs, so Zod errors never surface. Use `type="text"` with `autoComplete="email"` and let `z.string().email()` handle format validation.

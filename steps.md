@@ -104,4 +104,6 @@
 - # create e2e test agent using playwright
 - # /agents
 - write e2e tests agent using playwright.
+- move the test instructions from claude.md to e2e-test-writer.
+- update claude.md add instructions for using e2e-test-writer for writing tests.
 - 
