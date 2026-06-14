@@ -1,0 +1,14 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:5173",
+      "localStorage": [
+        {
+          "name": "helpdesk_token",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNDY3Y2IxNy0zY2E2LTQ0OTEtYTJiZC0xODA0MDhhNjRlMGEiLCJlbWFpbCI6ImFnZW50QHRlc3QuaGVscGRlc2subG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWdlbnRAdGVzdC5oZWxwZGVzay5sb2NhbCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFnZW50IiwiZXhwIjoxNzgxNDUxNTYzLCJpc3MiOiJIZWxwZGVzayIsImF1ZCI6IkhlbHBkZXNrIn0.KEl2TRgLt4yMD6K6n4x0NNOriEGaTbgYMyzT68LWU7o"
+        }
+      ]
+    }
+  ]
+}

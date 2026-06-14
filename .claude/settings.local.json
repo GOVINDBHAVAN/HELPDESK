@@ -22,7 +22,15 @@
       "Bash(rm filter-replacements.txt)",
       "Bash(git remote *)",
       "Bash(git push *)",
-      "PowerShell($env:PGPASSWORD = 'postgres'; & \"psql\" -U postgres -d helpdesk_test -c \"\\\\dt\" 2>&1)"
+      "PowerShell($env:PGPASSWORD = 'postgres'; & \"psql\" -U postgres -d helpdesk_test -c \"\\\\dt\" 2>&1)",
+      "Bash(New-Item -ItemType Directory -Force \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\e2e\\\\tests\\\\auth\")",
+      "Bash(Out-Null)",
+      "Bash(New-Item -ItemType Directory -Force \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\e2e\\\\storageState\")",
+      "Bash(New-Item -ItemType Directory -Force \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\e2e\\\\fixtures\")",
+      "Bash(Write-Host \"Directories created\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\e2e\\\\tests\\\\auth\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\e2e\\\\storageState\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\e2e\\\\fixtures\")"
     ]
   }
 }

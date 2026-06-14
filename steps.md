@@ -106,4 +106,7 @@
 - write e2e tests agent using playwright.
 - move the test instructions from claude.md to e2e-test-writer.
 - update claude.md add instructions for using e2e-test-writer for writing tests.
+- # write first e2e test
+- write e2e tests for the authentication system, cover all scenarios and edge cases.
+- \e2e> npm run test:ui
 - 
