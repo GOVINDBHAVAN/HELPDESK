@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '../auth/AuthContext'
 
 interface UserRow {
@@ -16,33 +16,23 @@ const ROLE_BADGE: Record<string, string> = {
 
 export function UsersPage() {
   const { token } = useAuth()
-  const [users, setUsers] = useState<UserRow[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const res = await fetch('/api/users', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        if (!res.ok) throw new Error(`Failed to load users (${res.status})`)
-        const data: UserRow[] = await res.json()
-        setUsers(data)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error')
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchUsers()
-  }, [token])
+  const { data: users = [], isLoading, error } = useQuery<UserRow[]>({
+    queryKey: ['users'],
+    queryFn: async () => {
+      const res = await fetch('/api/users', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (!res.ok) throw new Error(`Failed to load users (${res.status})`)
+      return res.json()
+    },
+  })
 
   return (
     <main className="max-w-4xl mx-auto px-6 py-8">
       <h1 className="text-3xl font-medium text-foreground mb-6">Users</h1>
 
-      {loading && (
+      {isLoading && (
         <div className="space-y-2">
           {[...Array(4)].map((_, i) => (
             <div key={i} className="h-10 rounded-md bg-muted animate-pulse" />
@@ -51,10 +41,10 @@ export function UsersPage() {
       )}
 
       {error && (
-        <p className="text-destructive text-sm">{error}</p>
+        <p className="text-destructive text-sm">{error.message}</p>
       )}
 
-      {!loading && !error && (
+      {!isLoading && !error && (
         <div className="rounded-lg border border-border overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-muted/50">

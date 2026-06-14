@@ -116,4 +116,7 @@
 
 - # do not provide much detail because Claude can figureout developing this. Claude will automatically run e2e tests
 - build the user list feature, build both the frontend and backend. This feature should be accesible by admins only.
+- # Improving React app with React Query to avoid boilerplate code like try/catch and fetch and convert to res.json()
+- # use Tanstack query for cache, retry and other feature.
+- replace fetch with tanstack query
 - 
