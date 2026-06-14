@@ -101,4 +101,7 @@
 - drop and re-create the helpdesk_test and create the users everytime with seed whenever I run the project of playwright for testing.
 - I ran npm run test:ui it created the database but tables are not created.
 - update project memory
+- # create e2e test agent using playwright
+- # /agents
+- write e2e tests agent using playwright.
 - 
