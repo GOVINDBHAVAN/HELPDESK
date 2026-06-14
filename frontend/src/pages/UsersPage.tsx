@@ -24,55 +24,52 @@ export function UsersPage() {
     <main className="max-w-4xl mx-auto px-6 py-8">
       <h1 className="text-3xl font-medium text-foreground mb-6">Users</h1>
 
-      {isLoading && (
-        <div className="space-y-2">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-10 rounded-md bg-muted animate-pulse" />
-          ))}
-        </div>
-      )}
-
       {error && (
         <p className="text-destructive text-sm">{error.message}</p>
       )}
 
-      {!isLoading && !error && (
-        <div className="rounded-lg border border-border overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/50">
-              <tr>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Name</th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Email</th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Role</th>
+      <div className="rounded-lg border border-border overflow-hidden">
+        <table className="w-full text-sm">
+          <thead className="bg-muted/50">
+            <tr>
+              <th className="px-4 py-3 text-left font-medium text-muted-foreground">Name</th>
+              <th className="px-4 py-3 text-left font-medium text-muted-foreground">Email</th>
+              <th className="px-4 py-3 text-left font-medium text-muted-foreground">Role</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {isLoading && [...Array(5)].map((_, i) => (
+              <tr key={i}>
+                <td className="px-4 py-3"><div className="h-4 w-28 rounded bg-muted animate-pulse" /></td>
+                <td className="px-4 py-3"><div className="h-4 w-48 rounded bg-muted animate-pulse" /></td>
+                <td className="px-4 py-3"><div className="h-5 w-14 rounded-full bg-muted animate-pulse" /></td>
               </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {users.length === 0 && (
-                <tr>
-                  <td colSpan={3} className="px-4 py-6 text-center text-muted-foreground">
-                    No users found.
-                  </td>
-                </tr>
-              )}
-              {users.map((u) => (
-                <tr key={u.id} className="hover:bg-muted/30 transition-colors">
-                  <td className="px-4 py-3 text-foreground font-medium">
-                    {u.displayName || '—'}
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">{u.email}</td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${ROLE_BADGE[u.role] ?? 'bg-muted text-muted-foreground'}`}
-                    >
-                      {u.role || 'Unknown'}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            ))}
+            {!isLoading && users.length === 0 && (
+              <tr>
+                <td colSpan={3} className="px-4 py-6 text-center text-muted-foreground">
+                  No users found.
+                </td>
+              </tr>
+            )}
+            {!isLoading && users.map((u) => (
+              <tr key={u.id} className="hover:bg-muted/30 transition-colors">
+                <td className="px-4 py-3 text-foreground font-medium">
+                  {u.displayName || '—'}
+                </td>
+                <td className="px-4 py-3 text-muted-foreground">{u.email}</td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${ROLE_BADGE[u.role] ?? 'bg-muted text-muted-foreground'}`}
+                  >
+                    {u.role || 'Unknown'}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </main>
   )
 }

@@ -122,4 +122,15 @@
 - # replace fetch with axios
 - the direct of fetch with authorization code everywhere can be simplified with any other library, does tanstack query provide the same or need to use Axios etc, if so implement the best one.
 - add an instruction to claude.md to use axios and react query.
+- # Replace old loading prctice with modern skeletons
+- replace the loading message with skeletons
+- # change network browser speed to low/slow for testing this.
+- add a link to homepage on the app name in navbar
+
+## Testing a single component in isolation
+
+- # To quickly check working of the component instead of going through e2e entirely. Using react testing library.
+- write component tests for the user list page using react testing library.
+- # select renderPage() of UsersPage.tsx.test
+- extract renderPage and put it into a separate module
 - 
