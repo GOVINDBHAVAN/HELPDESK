@@ -111,4 +111,9 @@
 - \e2e> npx playwright install
 - \e2e> npm run test:ui
 - # if tests are failing then check with claude.
+
+## Building User Management
+
+- # do not provide much detail because Claude can figureout developing this. Claude will automatically run e2e tests
+- build the user list feature, build both the frontend and backend. This feature should be accesible by admins only.
 - 

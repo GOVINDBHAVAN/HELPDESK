@@ -258,6 +258,24 @@ app.MapPost("/api/tickets", async (CreateTicketRequest request, HelpdeskDbContex
     });
 }).RequireAuthorization();
 
+app.MapGet("/api/users", async (UserManager<ApplicationUser> userManager) =>
+{
+    var users = userManager.Users.OrderBy(u => u.Email).ToList();
+    var result = new List<UserResponse>();
+    foreach (var user in users)
+    {
+        var roles = await userManager.GetRolesAsync(user);
+        result.Add(new UserResponse
+        {
+            Id = user.Id,
+            Email = user.Email ?? string.Empty,
+            DisplayName = user.DisplayName ?? string.Empty,
+            Role = roles.FirstOrDefault() ?? string.Empty
+        });
+    }
+    return Results.Ok(result);
+}).RequireAuthorization(policy => policy.RequireRole(nameof(UserRole.Admin)));
+
 app.Run();
 
 string GenerateJwtToken(ApplicationUser user, IList<string> roles, JwtSettings settings)
