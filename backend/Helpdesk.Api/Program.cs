@@ -270,7 +270,7 @@ string GenerateJwtToken(ApplicationUser user, IList<string> roles, JwtSettings s
     };
 
     foreach (var role in roles)
-        claims.Add(new Claim(ClaimTypes.Role, role));
+        claims.Add(new Claim("role", role));
 
     var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
     var tokenDescriptor = new JwtSecurityToken(

@@ -108,5 +108,7 @@
 - update claude.md add instructions for using e2e-test-writer for writing tests.
 - # write first e2e test
 - write e2e tests for the authentication system, cover all scenarios and edge cases.
+- \e2e> npx playwright install
 - \e2e> npm run test:ui
+- # if tests are failing then check with claude.
 - 
