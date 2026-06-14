@@ -133,4 +133,6 @@
 - write component tests for the user list page using react testing library.
 - # select renderPage() of UsersPage.tsx.test
 - extract renderPage and put it into a separate module
+- frontend> npm run test
+- update claude.md and add instructions for writing and executing component tests
 - 

@@ -61,6 +61,23 @@ See [implementation-plan.md](implementation-plan.md) for the full breakdown:
 
 ## Testing
 
+### Component tests (React Testing Library + Vitest)
+
+- **Runner**: Vitest, configured in `frontend/vite.config.ts` (jsdom environment, globals enabled)
+- **Setup file**: `frontend/src/test/setup.ts` — imports `@testing-library/jest-dom` matchers
+- **Shared render helper**: `frontend/src/test/renderWithProviders.tsx` — wraps any component in `QueryClientProvider` with `retry: false`. Import and use it in every component test instead of bare `render`.
+- **Test file location**: co-located with the component, e.g. `src/pages/UsersPage.test.tsx` next to `UsersPage.tsx`
+- **Mock the API module** at the top of every test file — never hit a real server:
+  ```ts
+  vi.mock('../lib/api', () => ({ default: { get: vi.fn() } }))
+  import api from '../lib/api'
+  const mockedGet = vi.mocked(api.get)
+  ```
+- **Reset mocks** in `beforeEach` with `vi.resetAllMocks()`
+- **Run tests**: `npm run test` from `frontend/` (single run) or `npm run test:watch` (watch mode)
+
+### E2E tests (Playwright)
+
 Use the **`playwright-e2e-writer` agent** for all end-to-end test writing — do not write Playwright tests inline. Trigger it after implementing any UI feature or API endpoint:
 
 ```
