@@ -75,7 +75,7 @@ Use the **context7 MCP server** for all library and framework documentation look
 - ASP.NET Core / EF Core / Identity / JWT
 - React / Vite / TypeScript
 - StackExchange.Redis / Npgsql
-- Tailwind CSS, React Query, Zustand (planned)
+- Tailwind CSS, TanStack Query, Axios, Zustand (planned)
 - Anthropic Claude SDK (Phase 2)
 
 Example usage before writing EF Core migrations or ASP.NET Identity code:
@@ -89,7 +89,8 @@ mcp__context7__query-docs(library_id, "migrations add-migration")
 - All endpoints live in `Program.cs` (Minimal API — no controllers)
 - No EF Core migrations yet — `db.Database.EnsureCreated()` is used in dev
 - JWT secret and connection strings go in `appsettings.Development.json` (not committed)
-- Frontend has no routing or state management libraries yet — add React Router and React Query as Phase 1 begins
+- **All API calls use Axios** — import the pre-configured instance from `src/lib/api.ts` (baseURL `/api`, auth header injected via interceptor). Never use raw `fetch` or create a second Axios instance.
+- **All server state uses TanStack Query** — use `useQuery` for reads and `useMutation` for writes. Never use `useState` + `useEffect` to fetch data. `QueryClientProvider` is already wired in `App.tsx`.
 - **All enums are stored as text in the database** — use `.HasConversion<string>()` in `OnModelCreating` for every enum property (e.g. `TicketStatus`, `TicketPriority`, `TicketCategory`)
 - **UI components use shadcn/ui** — run `npx shadcn@latest add <component>` from `frontend/` to add components; they land in `src/components/ui/`. Use the `cn()` helper from `@/lib/utils` for conditional class merging. Use shadcn semantic color tokens (`bg-background`, `text-foreground`, `text-muted-foreground`, `bg-primary`, `text-destructive`, `border-border`, etc.) — never hardcode Tailwind gray/color values directly.
 - **All forms use React Hook Form + Zod** — define a `z.object` schema, pass it via `zodResolver`, and spread `{...register('field')}` onto inputs. Never use uncontrolled `useState` for form fields.

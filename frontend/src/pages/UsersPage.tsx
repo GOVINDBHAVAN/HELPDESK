@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useAuth } from '../auth/AuthContext'
+import api from '../lib/api'
 
 interface UserRow {
   id: string
@@ -15,17 +15,9 @@ const ROLE_BADGE: Record<string, string> = {
 }
 
 export function UsersPage() {
-  const { token } = useAuth()
-
   const { data: users = [], isLoading, error } = useQuery<UserRow[]>({
     queryKey: ['users'],
-    queryFn: async () => {
-      const res = await fetch('/api/users', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      if (!res.ok) throw new Error(`Failed to load users (${res.status})`)
-      return res.json()
-    },
+    queryFn: () => api.get<UserRow[]>('/users').then((r) => r.data),
   })
 
   return (

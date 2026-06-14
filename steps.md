@@ -10,7 +10,7 @@
 
 ## Notes for Claude
 
-- #do not update step.md file using Claude Code, it's my internal file which is used to prepare the notes of developing the application.
+- # do not update step.md file using Claude Code, it's my internal file which is used to prepare the notes of developing the application.
 
 ## Scaffolding (Define the scope)
 
@@ -85,7 +85,7 @@
 
 ## Create a security audit sub-agent
 
-- #/agents : Create new agent.
+- # /agents : Create new agent.
 - review the codebase for security vulnerability
 - # rename agent file name to: security-reviewer.md
 - use the security-reviewer agent to review my code, specifically focusing on authentication and authorization.
@@ -119,4 +119,7 @@
 - # Improving React app with React Query to avoid boilerplate code like try/catch and fetch and convert to res.json()
 - # use Tanstack query for cache, retry and other feature.
 - replace fetch with tanstack query
+- # replace fetch with axios
+- the direct of fetch with authorization code everywhere can be simplified with any other library, does tanstack query provide the same or need to use Axios etc, if so implement the best one.
+- add an instruction to claude.md to use axios and react query.
 - 
