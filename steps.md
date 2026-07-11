@@ -141,4 +141,5 @@
 - # it should also create the unit-tests along with functionality.
 - add the ability to create new users. add a button above the user list for creating new users, when clicked, show a modal with 3 input fields: name, email and password, ensure the form is valid: name min 3 characters, password: min 8 characters, email: should be valid. When the form is submitted, create the user in the database and hide the model.
 - email and password are auto populated by chrome, prevent that.
+- extract the user form from userspage and put it into a separate module.
 - 
