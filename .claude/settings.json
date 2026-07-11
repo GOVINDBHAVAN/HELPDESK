@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx shadcn@latest add dialog button input label --yes)",
+      "Bash(npx tsc *)",
+      "Bash(npx eslint *)",
+      "Bash(npm run *)",
+      "Bash(xargs -I{} echo {})",
+      "Bash(docker info *)",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(cd \"d:/Practice/claude-code/mosh/HELPDESK\" && cat docker-compose.yml 2>/dev/null | head -50; echo \"---\"; which chromium-cli 2>/dev/null; ls /c/Users/govin/.claude 2>/dev/null | grep -i chrom)",
+      "Read(//c/Users/govin/.claude/**)",
+      "Bash(command -v chromium-cli)",
+      "Bash(echo \"exit:$?\")",
+      "Read(//d//**)",
+      "Bash(docker compose *)",
+      "Bash(curl -s http://127.0.0.1:5000/api/health)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:5173)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:5174)",
+      "Bash(sleep 3; cat /tmp/frontend.log 2>&1)",
+      "Read(//tmp/**)",
+      "PowerShell(Invoke-WebRequest -Uri \"http://127.0.0.1:5174\" -UseBasicParsing)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:5175)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 5173,5174,5175 -State Listen -ErrorAction SilentlyContinue)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5175)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://[::1]:5175\")",
+      "Bash(node \"C:\\\\Users\\\\govin\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Practice-claude-code-mosh-HELPDESK\\\\a05d2b9a-d8cf-4cec-954a-0bb3892bfa83\\\\scratchpad\\\\verify-create-user.mjs\")",
+      "Bash(cp \"C:\\\\Users\\\\govin\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Practice-claude-code-mosh-HELPDESK\\\\a05d2b9a-d8cf-4cec-954a-0bb3892bfa83\\\\scratchpad\\\\verify-create-user.mjs\" \"d:/Practice/claude-code/mosh/HELPDESK/e2e/verify-create-user.mjs\")",
+      "Bash(node verify-create-user.mjs)",
+      "Bash(cd \"d:/Practice/claude-code/mosh/HELPDESK/e2e\" && rm -f verify-*.png)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 5173,5174 -State Listen -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Id 76708,56228 -Force -ErrorAction SilentlyContinue)"
+    ],
+    "additionalDirectories": [
+      "D:\\Practice\\claude-code\\mosh\\HELPDESK\\e2e"
+    ]
+  }
+}

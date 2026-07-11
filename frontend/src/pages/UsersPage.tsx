@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import api from '../lib/api'
+import { CreateUserModal } from '../components/CreateUserModal'
 
 interface UserRow {
   id: string
@@ -22,7 +23,10 @@ export function UsersPage() {
 
   return (
     <main className="max-w-4xl mx-auto px-6 py-8">
-      <h1 className="text-3xl font-medium text-foreground mb-6">Users</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-medium text-foreground">Users</h1>
+        <CreateUserModal />
+      </div>
 
       {error && (
         <p className="text-destructive text-sm">{error.message}</p>
