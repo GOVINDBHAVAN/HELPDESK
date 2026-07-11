@@ -30,7 +30,9 @@
       "Bash(node verify-create-user.mjs)",
       "Bash(cd \"d:/Practice/claude-code/mosh/HELPDESK/e2e\" && rm -f verify-*.png)",
       "PowerShell(Get-NetTCPConnection -LocalPort 5173,5174 -State Listen -ErrorAction SilentlyContinue)",
-      "PowerShell(Stop-Process -Id 76708,56228 -Force -ErrorAction SilentlyContinue)"
+      "PowerShell(Stop-Process -Id 76708,56228 -Force -ErrorAction SilentlyContinue)",
+      "Bash(npx shadcn@latest add table badge --yes)",
+      "Bash(git stash *)"
     ],
     "additionalDirectories": [
       "D:\\Practice\\claude-code\\mosh\\HELPDESK\\e2e"

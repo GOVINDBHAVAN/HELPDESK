@@ -4,6 +4,9 @@ import { z } from 'zod'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { cn } from '@/lib/utils'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
 
 const loginSchema = z.object({
   email: z.string().email('Enter a valid email address'),
@@ -51,48 +54,38 @@ export function LoginPage() {
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-sm p-8 border border-border rounded-xl bg-card shadow-md flex flex-col gap-4"
       >
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-foreground">
+        <Label className="flex flex-col gap-1.5 items-start">
           Email
-          <input
+          <Input
             type="text"
             autoComplete="email"
             className={cn(
-              'w-full px-3 py-2.5 border rounded-md bg-background text-foreground text-sm outline-none transition-colors',
-              errors.email
-                ? 'border-destructive focus:ring-2 focus:ring-destructive/20'
-                : 'border-input focus:border-ring focus:ring-2 focus:ring-ring/20'
+              errors.email && 'border-destructive focus-visible:ring-destructive/20'
             )}
             {...register('email')}
           />
           {errors.email && <p role="alert" className="text-sm text-destructive">{errors.email.message}</p>}
-        </label>
-        <label className="flex flex-col gap-1.5 text-sm font-medium text-foreground">
+        </Label>
+        <Label className="flex flex-col gap-1.5 items-start">
           Password
-          <input
+          <Input
             type="password"
             autoComplete="current-password"
             className={cn(
-              'w-full px-3 py-2.5 border rounded-md bg-background text-foreground text-sm outline-none transition-colors',
-              errors.password
-                ? 'border-destructive focus:ring-2 focus:ring-destructive/20'
-                : 'border-input focus:border-ring focus:ring-2 focus:ring-ring/20'
+              errors.password && 'border-destructive focus-visible:ring-destructive/20'
             )}
             {...register('password')}
           />
           {errors.password && <p role="alert" className="text-sm text-destructive">{errors.password.message}</p>}
-        </label>
+        </Label>
         {errors.root && (
           <p role="alert" className="text-sm text-destructive px-3 py-2 bg-destructive/10 border border-destructive/20 rounded-md">
             {errors.root.message}
           </p>
         )}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full py-2.5 bg-primary text-primary-foreground border-none rounded-md text-sm font-medium cursor-pointer hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed transition-opacity"
-        >
+        <Button type="submit" disabled={isSubmitting} className="w-full">
           {isSubmitting ? 'Signing in…' : 'Sign in'}
-        </button>
+        </Button>
       </form>
     </main>
   )

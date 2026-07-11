@@ -143,3 +143,6 @@
 - email and password are auto populated by chrome, prevent that.
 - extract the user form from userspage and put it into a separate module.
 - extract the user table and put it into a separate module.
+- # this is my own based on video and my project difference of standard HTML table vs components/ui/table used in the video
+- replace standard HTML table and elements with UI components of shadCN, update the project memory to always use the reusable ShadCN components instead of standard HTML elements.
+- 
