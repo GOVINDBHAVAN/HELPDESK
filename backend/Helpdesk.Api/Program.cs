@@ -276,6 +276,27 @@ app.MapGet("/api/users", async (UserManager<ApplicationUser> userManager) =>
     return Results.Ok(result);
 }).RequireAuthorization(policy => policy.RequireRole(nameof(UserRole.Admin)));
 
+app.MapDelete("/api/users/{id}", async (string id, UserManager<ApplicationUser> userManager) =>
+{
+    var user = await userManager.FindByIdAsync(id);
+    if (user is null)
+    {
+        return Results.NotFound();
+    }
+
+    var roles = await userManager.GetRolesAsync(user);
+    if (roles.Contains(nameof(UserRole.Admin)))
+    {
+        return Results.BadRequest(new { error = "Admin users cannot be deleted." });
+    }
+
+    user.IsDeleted = true;
+    user.DeletedAt = DateTime.UtcNow;
+    await userManager.UpdateAsync(user);
+
+    return Results.NoContent();
+}).RequireAuthorization(policy => policy.RequireRole(nameof(UserRole.Admin)));
+
 app.Run();
 
 string GenerateJwtToken(ApplicationUser user, IList<string> roles, JwtSettings settings)

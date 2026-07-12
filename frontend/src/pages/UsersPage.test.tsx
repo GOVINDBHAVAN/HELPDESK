@@ -23,9 +23,9 @@ describe('UsersPage', () => {
 
     renderWithProviders(<UsersPage />)
 
-    // 5 skeleton rows × 3 cells each = 15 animated divs
+    // 5 skeleton rows × 4 cells each = 20 animated divs
     const pulsingDivs = document.querySelectorAll('.animate-pulse')
-    expect(pulsingDivs.length).toBe(15)
+    expect(pulsingDivs.length).toBe(20)
   })
 
   it('renders a row for each user after data loads', async () => {

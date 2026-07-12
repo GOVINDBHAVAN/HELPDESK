@@ -145,4 +145,7 @@
 - extract the user table and put it into a separate module.
 - # this is my own based on video and my project difference of standard HTML table vs components/ui/table used in the video
 - replace standard HTML table and elements with UI components of shadCN, update the project memory to always use the reusable ShadCN components instead of standard HTML elements.
+- # Implementing soft-delete functionality of users.
+- add the ability to delete users. Show a modal for confirmation, admin cannot be deleted, implement soft deletion.
+- Add the asked Claude code permissions in this session in my Claude settings permissions to be allowed for future sessions, everytime permission Yes is not required in this project.
 - 

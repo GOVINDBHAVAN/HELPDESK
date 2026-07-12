@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { Trash2 } from 'lucide-react'
 import api from '../lib/api'
 import {
   Table,
@@ -9,6 +11,8 @@ import {
   TableCell,
 } from './ui/table'
 import { Badge } from './ui/badge'
+import { Button } from './ui/button'
+import { DeleteUserModal } from './DeleteUserModal'
 
 interface UserRow {
   id: string
@@ -28,6 +32,7 @@ export function UserTable() {
     queryKey: ['users'],
     queryFn: () => api.get<UserRow[]>('/users').then((r) => r.data),
   })
+  const [userToDelete, setUserToDelete] = useState<UserRow | null>(null)
 
   return (
     <>
@@ -42,6 +47,7 @@ export function UserTable() {
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Role</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -50,11 +56,12 @@ export function UserTable() {
                 <TableCell><div className="h-4 w-28 rounded bg-muted animate-pulse" /></TableCell>
                 <TableCell><div className="h-4 w-48 rounded bg-muted animate-pulse" /></TableCell>
                 <TableCell><div className="h-5 w-14 rounded-full bg-muted animate-pulse" /></TableCell>
+                <TableCell><div className="h-8 w-8 ml-auto rounded bg-muted animate-pulse" /></TableCell>
               </TableRow>
             ))}
             {!isLoading && users.length === 0 && (
               <TableRow>
-                <TableCell colSpan={3} className="text-center text-muted-foreground">
+                <TableCell colSpan={4} className="text-center text-muted-foreground">
                   No users found.
                 </TableCell>
               </TableRow>
@@ -73,11 +80,27 @@ export function UserTable() {
                     {u.role || 'Unknown'}
                   </Badge>
                 </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label={`Delete ${u.displayName || u.email}`}
+                    disabled={u.role === 'Admin'}
+                    onClick={() => setUserToDelete(u)}
+                  >
+                    <Trash2 className="text-destructive" />
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
+
+      <DeleteUserModal
+        user={userToDelete}
+        onOpenChange={(open) => !open && setUserToDelete(null)}
+      />
     </>
   )
 }

@@ -39,12 +39,29 @@ Strategy:
 
 ## Key UI Facts
 
-- Email input: `type="text"` (not `type="email"`) — browser validation bypassed, Zod handles it
+- Email input on the login form: `type="text"` (not `type="email"`) — browser validation bypassed, Zod handles it. NOTE: `CreateUserForm.tsx`'s email field IS `type="email"` — that form doesn't hit the same gotcha because it isn't being tested for Zod email-format errors yet.
 - Error border class: `border-destructive` (shadcn token, NOT `border-red-500`)
 - Error paragraphs: `role="alert"`
 - Submit button: "Sign in" idle / "Signing in…" submitting
 - Token localStorage key: `helpdesk_token`
 - `AdminRoute`: unauthenticated → `/login`; authenticated non-Admin → `/` (not `/login`)
+- shadcn `Dialog` (Radix) renders with accessible `role="dialog"` — `page.getByRole('dialog')` works directly, no testid needed
+- shadcn `Table` renders real `<table>`/`<tr>` — `page.getByRole('row').filter({ hasText: ... })` is the reliable way to scope to one row (row accessible-name computation via `getByRole('row', {name})` is unreliable when the row contains an icon button with its own aria-label; use `.filter({hasText})` instead)
+
+## Users / Delete-user feature (added 2026-07-12)
+
+- `POST /api/auth/register` now `RequireAuthorization(RequireRole(Admin))` — it is NO LONGER anonymous (CLAUDE.md's endpoint table is stale on this point). Any test that seeds a user must attach an admin bearer token as an `Authorization` header when calling it directly via `request.post`.
+- New helper file `e2e/fixtures/users.ts`: `createTestUser(request, adminToken, overrides?)`, `deleteTestUser(request, adminToken, id)`, `listUsers(request, adminToken)`. Always creates users with a `Date.now()-random` suffixed email/displayName to avoid collisions under `fullyParallel: true`. Use this instead of touching the shared `agent@test.helpdesk.local` fixture user when a test needs to delete something.
+- `/api/auth/register` always assigns the Agent role — no way to seed a fresh Student/Admin via that endpoint.
+- Soft-delete: `DELETE /api/users/{id}` sets `IsDeleted`/`DeletedAt`; EF Core `HasQueryFilter` then excludes the row from `GET /api/users` automatically. 204 on success, 404 for not-found/already-deleted id, 400 `{ error: "Admin users cannot be deleted." }` when target has the Admin role, 403 when caller isn't Admin.
+- `UserTable.tsx` delete icon button: ghost icon `Button`, `aria-label="Delete {displayName || email}"`, `disabled` when `role === 'Admin'`. Disabled shadcn/native buttons ignore even `click({ force: true })` — good way to prove "cannot be opened", not just "attribute is disabled".
+- `DeleteUserModal.tsx` description text: `Are you sure you want to delete {name}? This action cannot be undone by the user.` — match on the leading question, not the whole string, in case wording shifts.
+- Test file: `e2e/tests/admin/delete-user.spec.ts`.
 
 **Why:** JWT in localStorage (not cookies) requires manual storage state construction.
 **How to apply:** Always use `buildStorageState()` from `e2e/fixtures/auth.ts` when creating authenticated test contexts; never rely on `request.storageState()` alone.
+
+## Sandbox execution limitation
+
+This dev sandbox does not have PostgreSQL running/installed (port 5432 refuses connections), so `global-setup.ts` fails at step 1 (drop/recreate `helpdesk_test`) before the backend or frontend ever start. Full `npx playwright test` runs cannot be executed live here.
+**How to apply:** Validate new specs with `npx playwright test --list` (catches import/syntax errors) and typecheck with `frontend/node_modules/.bin/tsc --noEmit -p e2e/tsconfig.json --ignoreDeprecations 6.0` (e2e/ has no local `tsc`; borrow the frontend's). Tell the user a live run is still needed on a machine with Postgres + dotnet available.

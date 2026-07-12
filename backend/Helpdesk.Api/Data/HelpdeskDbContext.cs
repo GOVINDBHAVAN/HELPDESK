@@ -17,6 +17,8 @@ public class HelpdeskDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(builder);
 
+        builder.Entity<ApplicationUser>().HasQueryFilter(u => !u.IsDeleted);
+
         builder.Entity<Ticket>(entity =>
         {
             entity.Property(t => t.Subject).IsRequired().HasMaxLength(250);
