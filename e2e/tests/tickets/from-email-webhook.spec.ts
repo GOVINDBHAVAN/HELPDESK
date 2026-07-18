@@ -32,9 +32,9 @@
  *    directly (mirroring global-setup.ts's connection handling) to force a
  *    ticket to Closed for the non-matching scenario, and to clean up every
  *    ticket this spec creates.
- *  - Enums serialize as raw integers over JSON here (no
- *    JsonStringEnumConverter registered) — see the TICKET_* constants in
- *    fixtures/webhook.ts instead of hardcoding magic numbers.
+ *  - Enums serialize as their C# names over JSON (JsonStringEnumConverter
+ *    registered in Program.cs) — see the TICKET_* constants in
+ *    fixtures/webhook.ts instead of hardcoding string literals.
  *  - No waitForTimeout() anywhere.
  */
 
@@ -78,7 +78,7 @@ test.describe('POST /api/tickets/from-email — webhook secret', () => {
     const res = await postIncomingEmail(
       request,
       { fromEmail: email, subject: 'Cannot access my account', body: 'Help please.' },
-      undefined // omit header entirely
+      null // omit header entirely
     );
 
     expect(res.status(), 'missing X-Webhook-Secret header must be rejected').toBe(401);

@@ -63,7 +63,8 @@
       "Bash(powershell -NoProfile -Command \"[Convert]::ToBase64String\\(\\(1..48 | ForEach-Object { Get-Random -Minimum 0 -Maximum 256 }\\)\\)\")",
       "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(48\\).toString\\('base64'\\)\\)\")",
       "Bash(git check-ignore *)",
-      "Bash(frontend/node_modules/.bin/tsc --noEmit -p e2e/tsconfig.json --ignoreDeprecations 6.0)"
+      "Bash(frontend/node_modules/.bin/tsc --noEmit -p e2e/tsconfig.json --ignoreDeprecations 6.0)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:5000/api/health --max-time 5)"
     ],
     "additionalDirectories": [
       "D:\\Practice\\claude-code\\mosh\\HELPDESK\\e2e"

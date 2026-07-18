@@ -6,7 +6,7 @@
       "localStorage": [
         {
           "name": "helpdesk_token",
-          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3ODExZmQyYS1jOTQwLTRhYjAtYmRjNS1iMmRiOGQxNjUwNzYiLCJlbWFpbCI6ImFkbWluQHRlc3QuaGVscGRlc2subG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AdGVzdC5oZWxwZGVzay5sb2NhbCIsInJvbGUiOiJBZG1pbiIsImV4cCI6MTc4Mzg2MzE4OCwiaXNzIjoiSGVscGRlc2siLCJhdWQiOiJIZWxwZGVzayJ9.cUyIftyEdS2xeGsJlg2qQ7yPQr68YuRIsNH9G0CPprk"
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhMmJiMWE1Yy1hN2RkLTQ4OGQtOTI5My04MzU0OTVlMjY1OWQiLCJlbWFpbCI6ImFkbWluQHRlc3QuaGVscGRlc2subG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5AdGVzdC5oZWxwZGVzay5sb2NhbCIsInJvbGUiOiJBZG1pbiIsImV4cCI6MTc4NDQxNTEzMSwiaXNzIjoiSGVscGRlc2siLCJhdWQiOiJIZWxwZGVzayJ9.2eECpVOSeF-0cl7XjD7ISR40YTSDmEAyTgfB1g30e1c"
         }
       ]
     }
