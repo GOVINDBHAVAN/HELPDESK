@@ -55,7 +55,14 @@
       "PowerShell(Stop-Process -Id 89708 -Force -ErrorAction SilentlyContinue)",
       "PowerShell(Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue)",
       "Bash(dotnet add *)",
-      "Bash(dotnet remove *)"
+      "Bash(dotnet remove *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5000/api/health)",
+      "Bash(dotnet run *)",
+      "Bash(echo \"started with pid $!\")",
+      "Bash(curl -s -X POST http://localhost:5000/api/tickets/from-email -H 'Content-Type: application/json' -d '{ *)",
+      "Bash(powershell -NoProfile -Command \"[Convert]::ToBase64String\\(\\(1..48 | ForEach-Object { Get-Random -Minimum 0 -Maximum 256 }\\)\\)\")",
+      "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(48\\).toString\\('base64'\\)\\)\")",
+      "Bash(git check-ignore *)"
     ],
     "additionalDirectories": [
       "D:\\Practice\\claude-code\\mosh\\HELPDESK\\e2e"

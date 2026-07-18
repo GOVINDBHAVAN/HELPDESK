@@ -1,8 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using Helpdesk.Api.Data;
 using Helpdesk.Api.Entities;
+using Helpdesk.Api.Filters;
 using Helpdesk.Api.Models;
 using Helpdesk.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -26,6 +28,9 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(
 
 builder.Services.Configure<StorageSettings>(builder.Configuration.GetSection("AttachmentStorage"));
 builder.Services.AddSingleton<IStorageService, LocalStorageService>();
+
+builder.Services.Configure<WebhookSettings>(builder.Configuration.GetSection("WebhookSettings"));
+builder.Services.AddScoped<WebhookSecretFilter>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -265,6 +270,34 @@ app.MapPost("/api/tickets/from-email", async (IncomingEmailRequest request, Help
         return Results.BadRequest(new { error = "FromEmail and Subject are required." });
     }
 
+    var normalizedSubject = NormalizeSubject(request.Subject);
+
+    var existingTicket = await db.Tickets
+        .Where(t => t.StudentEmail == request.FromEmail && t.Status != TicketStatus.Closed)
+        .ToListAsync();
+    var matchingTicket = existingTicket
+        .FirstOrDefault(t => NormalizeSubject(t.Subject) == normalizedSubject);
+
+    if (matchingTicket is not null)
+    {
+        matchingTicket.Description += $"\n\n---\n{DateTime.UtcNow:u}\n{request.Body}";
+        matchingTicket.UpdatedAt = DateTime.UtcNow;
+        await db.SaveChangesAsync();
+
+        return Results.Ok(new TicketResponse
+        {
+            Id = matchingTicket.Id,
+            Subject = matchingTicket.Subject,
+            Description = matchingTicket.Description,
+            Status = matchingTicket.Status,
+            Priority = matchingTicket.Priority,
+            Category = matchingTicket.Category,
+            StudentEmail = matchingTicket.StudentEmail,
+            CreatedAt = matchingTicket.CreatedAt,
+            UpdatedAt = matchingTicket.UpdatedAt
+        });
+    }
+
     var ticket = new Ticket
     {
         Subject = request.Subject,
@@ -292,7 +325,7 @@ app.MapPost("/api/tickets/from-email", async (IncomingEmailRequest request, Help
         CreatedAt = ticket.CreatedAt,
         UpdatedAt = ticket.UpdatedAt
     });
-}).AllowAnonymous();
+}).AllowAnonymous().AddEndpointFilter<WebhookSecretFilter>();
 
 app.MapGet("/api/users", async (UserManager<ApplicationUser> userManager) =>
 {
@@ -334,6 +367,12 @@ app.MapDelete("/api/users/{id}", async (string id, UserManager<ApplicationUser> 
 }).RequireAuthorization(policy => policy.RequireRole(nameof(UserRole.Admin)));
 
 app.Run();
+
+string NormalizeSubject(string subject)
+{
+    var stripped = Regex.Replace(subject, @"^\s*(re|fwd?)\s*:\s*", string.Empty, RegexOptions.IgnoreCase);
+    return stripped.Trim().ToLowerInvariant();
+}
 
 string GenerateJwtToken(ApplicationUser user, IList<string> roles, JwtSettings settings)
 {

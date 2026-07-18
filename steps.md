@@ -154,4 +154,6 @@
 
 - add the ability to receive an email at a support address and convert it t a ticket.
 - Make some changes to have no email providers at this stage, need to narrow down the scope of work at this stage, with plain ticket only, just convert the email to a ticket with no AI processing, AI features can be added later.
-- 
+- create a ticket using the webhook.
+- # based on course backend, there is web-hook middleware.
+- Check at API backend, do we need a secured web-hook router middleware to process the webhooks, also check and create for web-secret feature, web-hook process things like inbound-email POST requests (should avoid creating duplicate tikets of same sender and subject) 
