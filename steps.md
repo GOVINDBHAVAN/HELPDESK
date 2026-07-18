@@ -163,3 +163,6 @@
 - the e2e tests of webhooks is getting failed in asserts. Fix those tests
 - build the ticket list feature, sort tickets by newest first.
 - the menu top nav is not showing tickets menu, organize the menu and make it better UI
+- most of the e2e tests you wrote for the tickets page can be implemented as unit-tests, remove those tests and implement them as component tests.
+- update @Claude.md going forward, rely mostly on component tests, use e2e tests only when necessary.
+- 

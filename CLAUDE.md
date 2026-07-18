@@ -61,6 +61,15 @@ See [implementation-plan.md](implementation-plan.md) for the full breakdown:
 
 ## Testing
 
+### Testing philosophy
+
+Rely mostly on component tests; reach for e2e only when necessary. Concretely:
+
+- Default to a component test for anything that can be verified with a mocked `api` module: rendering logic, columns/rows/badges, loading/error/empty states, form validation, client-side sorting/filtering.
+- Only add (or keep) an e2e test for behavior a mocked component test structurally cannot verify — real backend contracts (e.g. DB-level ordering, auth/JWT flow, role-based access, cross-page navigation) or genuine multi-system integration.
+- When a feature needs both, write the component test first for the rendering/logic surface, and let the e2e test cover only the remaining real-backend gap — don't duplicate the same assertion in both layers.
+- When reviewing or trimming an existing e2e spec, ask "would a mocked component test prove this just as well?" — if yes, move it to Vitest and delete the e2e version.
+
 ### Component tests (React Testing Library + Vitest)
 
 - **Runner**: Vitest, configured in `frontend/vite.config.ts` (jsdom environment, globals enabled)
@@ -78,7 +87,7 @@ See [implementation-plan.md](implementation-plan.md) for the full breakdown:
 
 ### E2E tests (Playwright)
 
-Use the **`playwright-e2e-writer` agent** for all end-to-end test writing — do not write Playwright tests inline. Trigger it after implementing any UI feature or API endpoint:
+Use the **`playwright-e2e-writer` agent** for all end-to-end test writing — do not write Playwright tests inline. Per the testing philosophy above, only trigger it when a feature has a real-backend concern component tests can't cover (auth flow, role-based access, DB-level ordering/contracts, cross-page navigation) — not automatically for every UI feature or API endpoint:
 
 ```
 Agent({ subagent_type: "playwright-e2e-writer", ... })

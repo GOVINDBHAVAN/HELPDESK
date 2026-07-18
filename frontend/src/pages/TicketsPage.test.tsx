@@ -60,6 +60,28 @@ describe('TicketsPage', () => {
     expect(within(rows[1] as HTMLElement).getByText('Refund question')).toBeInTheDocument()
   })
 
+  it('renders the Student column with the ticket studentEmail', async () => {
+    mockedGet.mockResolvedValue({
+      data: [
+        {
+          id: 1,
+          subject: 'Cannot access course materials',
+          status: 'Open',
+          priority: 'High',
+          category: 'Technical',
+          studentEmail: 'dana@example.com',
+          createdAt: '2026-07-18T10:00:00Z',
+        },
+      ],
+    })
+
+    renderWithProviders(<TicketsPage />)
+
+    await screen.findByText('Cannot access course materials')
+
+    expect(screen.getByText('dana@example.com')).toBeInTheDocument()
+  })
+
   it('renders status and priority badges', async () => {
     mockedGet.mockResolvedValue({
       data: [
