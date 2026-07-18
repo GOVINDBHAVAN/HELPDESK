@@ -64,7 +64,17 @@
       "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(48\\).toString\\('base64'\\)\\)\")",
       "Bash(git check-ignore *)",
       "Bash(frontend/node_modules/.bin/tsc --noEmit -p e2e/tsconfig.json --ignoreDeprecations 6.0)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:5000/api/health --max-time 5)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:5000/api/health --max-time 5)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)",
+      "Bash(netstat -ano)",
+      "Bash(curl -s -X POST http://localhost:5000/api/auth/register -H 'Content-Type: application/json' -d '{\"email\":\"navtest___CMDSUB_OUTPUT__@example.com\",\"password\":\"Passw0rd!123\",\"displayName\":\"Nav Test\"}')",
+      "Bash(curl -s -X POST http://localhost:5000/api/auth/login -H 'Content-Type: application/json' -d '{\"email\":\"navtest___CMDSUB_OUTPUT__@example.com\",\"password\":\"Passw0rd!123\"}')",
+      "Bash(curl -s -i -X POST http://localhost:5000/api/auth/register -H 'Content-Type: application/json' -d '{\"email\":\"navtest2___CMDSUB_OUTPUT__@example.com\",\"password\":\"Passw0rd!123\",\"displayName\":\"Nav Test\"}')",
+      "Bash(curl -s -i -X POST http://localhost:5000/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@example.com\",\"password\":\"Password@123\"}')",
+      "Bash(node \"C:\\\\Users\\\\govin\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Practice-claude-code-mosh-HELPDESK\\\\50c42477-7813-4fa8-bcdc-85ee126a4a69\\\\scratchpad\\\\nav_check.js\" \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2I1YjcxNC00ZGM2LTQ4MjEtYjVhMC0xMGQzZjhmYWU0M2UiLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzg0NDE4MTE4LCJpc3MiOiJIZWxwZGVzayIsImF1ZCI6IkhlbHBkZXNrIn0.eDGx-9KxVzJD1X4zHNa5XEbYDL864C0aCY1Wi2h3URE\")",
+      "Bash(node _nav_check.js \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2I1YjcxNC00ZGM2LTQ4MjEtYjVhMC0xMGQzZjhmYWU0M2UiLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzg0NDE4MTE4LCJpc3MiOiJIZWxwZGVzayIsImF1ZCI6IkhlbHBkZXNrIn0.eDGx-9KxVzJD1X4zHNa5XEbYDL864C0aCY1Wi2h3URE\")",
+      "Bash(powershell -NonInteractive -Command \"Get-NetTCPConnection -LocalPort 5173,5000 -State Listen -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique\")",
+      "Bash(powershell -NonInteractive -Command \"Stop-Process -Id 7388,21112 -Force -ErrorAction SilentlyContinue\")"
     ],
     "additionalDirectories": [
       "D:\\Practice\\claude-code\\mosh\\HELPDESK\\e2e"
