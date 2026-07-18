@@ -31,6 +31,13 @@ public class CreateTicketRequest
     public string StudentEmail { get; set; } = string.Empty;
 }
 
+public class IncomingEmailRequest
+{
+    public string FromEmail { get; set; } = string.Empty;
+    public string Subject { get; set; } = string.Empty;
+    public string Body { get; set; } = string.Empty;
+}
+
 public class TicketResponse
 {
     public int Id { get; set; }

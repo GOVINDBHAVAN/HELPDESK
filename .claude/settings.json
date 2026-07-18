@@ -53,7 +53,9 @@
       "PowerShell(Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue | Select-Object LocalAddress,LocalPort,OwningProcess | ForEach-Object { $_; Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue | Select-Object Id,ProcessName,Path,StartTime })",
       "PowerShell(Get-Process -Id 89708 -ErrorAction SilentlyContinue)",
       "PowerShell(Stop-Process -Id 89708 -Force -ErrorAction SilentlyContinue)",
-      "PowerShell(Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue)"
+      "PowerShell(Get-NetTCPConnection -LocalPort 5000 -State Listen -ErrorAction SilentlyContinue)",
+      "Bash(dotnet add *)",
+      "Bash(dotnet remove *)"
     ],
     "additionalDirectories": [
       "D:\\Practice\\claude-code\\mosh\\HELPDESK\\e2e"

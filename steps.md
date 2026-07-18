@@ -149,3 +149,9 @@
 - add the ability to delete users. Show a modal for confirmation, admin cannot be deleted, implement soft deletion.
 - Add the asked Claude code permissions in this session in my Claude settings permissions to be allowed for future sessions, everytime permission Yes is not required in this project.
 - 
+
+## Creating the Tickets feature
+
+- add the ability to receive an email at a support address and convert it t a ticket.
+- Make some changes to have no email providers at this stage, need to narrow down the scope of work at this stage, with plain ticket only, just convert the email to a ticket with no AI processing, AI features can be added later.
+- 

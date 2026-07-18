@@ -258,6 +258,42 @@ app.MapPost("/api/tickets", async (CreateTicketRequest request, HelpdeskDbContex
     });
 }).RequireAuthorization();
 
+app.MapPost("/api/tickets/from-email", async (IncomingEmailRequest request, HelpdeskDbContext db) =>
+{
+    if (string.IsNullOrWhiteSpace(request.FromEmail) || string.IsNullOrWhiteSpace(request.Subject))
+    {
+        return Results.BadRequest(new { error = "FromEmail and Subject are required." });
+    }
+
+    var ticket = new Ticket
+    {
+        Subject = request.Subject,
+        Description = request.Body,
+        Priority = TicketPriority.Medium,
+        Category = TicketCategory.General,
+        StudentEmail = request.FromEmail,
+        CreatedAt = DateTime.UtcNow,
+        UpdatedAt = DateTime.UtcNow,
+        CreatedById = null
+    };
+
+    db.Tickets.Add(ticket);
+    await db.SaveChangesAsync();
+
+    return Results.Created($"/api/tickets/{ticket.Id}", new TicketResponse
+    {
+        Id = ticket.Id,
+        Subject = ticket.Subject,
+        Description = ticket.Description,
+        Status = ticket.Status,
+        Priority = ticket.Priority,
+        Category = ticket.Category,
+        StudentEmail = ticket.StudentEmail,
+        CreatedAt = ticket.CreatedAt,
+        UpdatedAt = ticket.UpdatedAt
+    });
+}).AllowAnonymous();
+
 app.MapGet("/api/users", async (UserManager<ApplicationUser> userManager) =>
 {
     var users = userManager.Users.OrderBy(u => u.Email).ToList();
