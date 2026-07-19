@@ -70,6 +70,38 @@
  * count is `min(pageSize, totalCount)`; page 2's items are disjoint by id
  * from page 1's).
  *
+ * Server-side filtering (2026-07-19): GET /api/tickets now also accepts
+ * `status`/`priority`/`category`/`search` (Program.cs ~line 220-251) — each
+ * optional, composed with AND (not OR), `status`/`priority`/`category` are
+ * case-insensitive enum names that are silently ignored if unparseable, and
+ * `search` does a case-insensitive `ILIKE %search%` against Subject OR
+ * StudentEmail. TicketTable.tsx grew a filter toolbar: a debounced (300ms)
+ * search Input, three shadcn Selects (`aria-label`s "Filter by status" /
+ * "Filter by priority" / "Filter by category" — added because Radix's
+ * combobox role doesn't expose an accessible name from visible text), and a
+ * "Clear filters" button that only renders when a filter is active.
+ * Component tests (TicketsPage.test.tsx's `describe('filtering', ...)`
+ * block, mocked `api.get`) already cover total-count/range text, disabled
+ * states, per-filter param assertions, debounce behavior, and Clear
+ * filters — all of which only prove the frontend *asks* correctly. The
+ * "server-side filtering" describe block below is the one thing that can't
+ * be mocked: that the real Postgres `Where` clauses actually filter rows and
+ * compose with AND, and that `ILike` actually matches. Status is NOT covered
+ * here — there is no API to set a ticket's status at creation (`Status`
+ * always defaults to `Open`; see fixtures/tickets.ts / CreateTicketRequest),
+ * so a status filter can't be proven against freshly-seeded data without
+ * reaching outside the fixtures pattern this suite uses elsewhere
+ * (fixtures/db.ts's `closeTicket` exists for the webhook suite's own
+ * purposes, but mutating status directly here would test UPDATE semantics
+ * this endpoint doesn't even have — out of scope). Category, priority, and
+ * search are all settable via CreateTicketRequest and are enough to prove
+ * Where-clause AND composition and ILIKE search actually hit the DB. The
+ * search step deliberately searches a substring shared by all four seeded
+ * subjects (not just the target's) while category+priority filters are
+ * still active: if search were OR-ed with the other filters instead of
+ * AND-ed, all four would reappear, since the search term alone matches all
+ * of them.
+ *
  * Architecture notes (see e2e/fixtures/* and .claude/agent-memory):
  *  - JWT lives in localStorage under "helpdesk_token"; storage state is
  *    built manually via buildStorageState(), not request.storageState().
@@ -535,6 +567,233 @@ test.describe('Ticket list — server-side pagination', () => {
         ownTicketCount,
         'at least some of the 12 seeded tickets must be visible across pages 1-2'
       ).toBeGreaterThan(0);
+    } finally {
+      await deleteTicketsForStudentEmail(studentEmail);
+    }
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Server-side filtering (real backend Where-clause composition + ILIKE search)
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface FilteredTicketsExpectation {
+  status?: string;
+  priority?: string;
+  category?: string;
+  search?: string;
+  /** Query params that must be ABSENT entirely from the request URL. */
+  absentParams?: Array<'status' | 'priority' | 'category' | 'search'>;
+}
+
+/**
+ * Wait for a /api/tickets GET response matching an exact set of filter
+ * params. Parses the response URL's query string (like
+ * waitForTicketsPageResponse above) rather than substring-matching, so e.g.
+ * `search=Bill` can never accidentally match `search=Billing-stuff`. Must be
+ * started via Promise.all alongside the action that triggers the request
+ * (a Select option click, or an Input fill) so the listener is attached
+ * before the response can arrive.
+ */
+function waitForFilteredTicketsResponse(
+  page: import('@playwright/test').Page,
+  expectation: FilteredTicketsExpectation
+) {
+  return page.waitForResponse((resp) => {
+    if (
+      !resp.url().includes('/api/tickets') ||
+      resp.request().method() !== 'GET' ||
+      resp.status() !== 200
+    ) {
+      return false;
+    }
+    const params = new URL(resp.url()).searchParams;
+    if (expectation.status !== undefined && params.get('status') !== expectation.status) return false;
+    if (expectation.priority !== undefined && params.get('priority') !== expectation.priority) return false;
+    if (expectation.category !== undefined && params.get('category') !== expectation.category) return false;
+    if (expectation.search !== undefined && params.get('search') !== expectation.search) return false;
+    for (const key of expectation.absentParams ?? []) {
+      if (params.has(key)) return false;
+    }
+    return true;
+  });
+}
+
+test.describe('Ticket list — server-side filtering', () => {
+  test.use({ storageState: STORAGE_STATE_PATHS.agent });
+
+  test('category and priority filters compose via a real AND, search narrows further without becoming an OR, and Clear filters removes every param', async ({
+    page,
+    request,
+  }) => {
+    const agentToken = await fetchToken(
+      request,
+      TEST_CREDENTIALS.agent.email,
+      TEST_CREDENTIALS.agent.password
+    );
+    const studentEmail = uniqueStudentEmail('ticket-list-filters');
+
+    // Shared prefix so the search step (below) can search a substring that
+    // matches ALL FOUR seeded subjects, not just the target's — that's what
+    // makes the search assertion a real proof of AND composition rather than
+    // a trivial "unique substring only matches one row" check.
+    const prefix = `FilterAndTest-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const targetSubject = `${prefix}-Target`; // Billing + High — matches every filter below
+    const categoryOnlySubject = `${prefix}-CategoryOnly`; // Billing + Low — category matches, priority doesn't
+    const priorityOnlySubject = `${prefix}-PriorityOnly`; // Technical + High — priority matches, category doesn't
+    const neitherSubject = `${prefix}-Neither`; // Technical + Low — matches nothing
+
+    try {
+      await createTestTicket(request, agentToken, {
+        subject: targetSubject,
+        studentEmail,
+        category: 'Billing',
+        priority: 'High',
+      });
+      await createTestTicket(request, agentToken, {
+        subject: categoryOnlySubject,
+        studentEmail,
+        category: 'Billing',
+        priority: 'Low',
+      });
+      await createTestTicket(request, agentToken, {
+        subject: priorityOnlySubject,
+        studentEmail,
+        category: 'Technical',
+        priority: 'High',
+      });
+      await createTestTicket(request, agentToken, {
+        subject: neitherSubject,
+        studentEmail,
+        category: 'Technical',
+        priority: 'Low',
+      });
+
+      await page.goto('/tickets');
+      await waitForTicketsResponse(page);
+
+      // ── Step 1: category=Billing ──────────────────────────────────────
+      const categoryCombobox = page.getByRole('combobox', { name: 'Filter by category' });
+      await expect(categoryCombobox, 'category filter dropdown should be visible').toBeVisible();
+      await categoryCombobox.click();
+      const [categoryResponse] = await Promise.all([
+        waitForFilteredTicketsResponse(page, { category: 'Billing', absentParams: ['priority', 'search'] }),
+        page.getByRole('option', { name: 'Billing', exact: true }).click(),
+      ]);
+      expect(
+        new URL(categoryResponse.url()).searchParams.get('category'),
+        'selecting the Billing option must send category=Billing to the real backend'
+      ).toBe('Billing');
+
+      const categoryRows = await collectRowsUntilFound(page, [targetSubject, categoryOnlySubject], {
+        waitForNextPage: () =>
+          waitForFilteredTicketsResponse(page, { category: 'Billing', absentParams: ['priority', 'search'] }),
+      });
+      expect(
+        categoryRows.some((r) => r.includes(targetSubject)),
+        'Billing-category ticket (target) must be visible under category=Billing'
+      ).toBe(true);
+      expect(
+        categoryRows.some((r) => r.includes(categoryOnlySubject)),
+        'Billing-category ticket (categoryOnly) must be visible under category=Billing'
+      ).toBe(true);
+      expect(
+        categoryRows.some((r) => r.includes(priorityOnlySubject)),
+        'Technical-category ticket must NOT be visible when filtering category=Billing'
+      ).toBe(false);
+      expect(
+        categoryRows.some((r) => r.includes(neitherSubject)),
+        'Technical-category ticket must NOT be visible when filtering category=Billing'
+      ).toBe(false);
+
+      // ── Step 2: add priority=High on top (AND, not OR) ────────────────
+      const priorityCombobox = page.getByRole('combobox', { name: 'Filter by priority' });
+      await priorityCombobox.click();
+      const [bothResponse] = await Promise.all([
+        waitForFilteredTicketsResponse(page, { category: 'Billing', priority: 'High', absentParams: ['search'] }),
+        page.getByRole('option', { name: 'High', exact: true }).click(),
+      ]);
+      expect(
+        new URL(bothResponse.url()).searchParams.get('priority'),
+        'selecting the High option must send priority=High alongside the still-active category=Billing'
+      ).toBe('High');
+
+      const bothRows = await collectRowsUntilFound(page, [targetSubject], {
+        waitForNextPage: () =>
+          waitForFilteredTicketsResponse(page, { category: 'Billing', priority: 'High', absentParams: ['search'] }),
+      });
+      expect(
+        bothRows.some((r) => r.includes(targetSubject)),
+        'the ticket matching BOTH category=Billing AND priority=High must be visible'
+      ).toBe(true);
+      expect(
+        bothRows.some((r) => r.includes(categoryOnlySubject)),
+        'a Billing ticket with priority=Low must be excluded once priority=High is also active — proves AND, not OR'
+      ).toBe(false);
+      expect(
+        bothRows.some((r) => r.includes(priorityOnlySubject)),
+        'a High-priority ticket with category=Technical must stay excluded — the category filter still applies'
+      ).toBe(false);
+      expect(
+        bothRows.some((r) => r.includes(neitherSubject)),
+        'a ticket matching neither filter must stay excluded'
+      ).toBe(false);
+
+      // ── Step 3: layer search on top — search alone would match all four
+      // seeded subjects (shared `prefix`), so only the target surviving
+      // proves search composes with AND against the still-active
+      // category/priority filters instead of falling back to an OR. ──────
+      const searchInput = page.getByPlaceholder('Search subject or student email…');
+      const [searchResponse] = await Promise.all([
+        waitForFilteredTicketsResponse(page, { category: 'Billing', priority: 'High', search: prefix }),
+        searchInput.fill(prefix),
+      ]);
+      expect(
+        new URL(searchResponse.url()).searchParams.get('search'),
+        'the debounced search request must carry the typed value'
+      ).toBe(prefix);
+
+      const searchRows = await collectRowsUntilFound(page, [targetSubject], {
+        waitForNextPage: () =>
+          waitForFilteredTicketsResponse(page, { category: 'Billing', priority: 'High', search: prefix }),
+      });
+      expect(
+        searchRows.some((r) => r.includes(targetSubject)),
+        'the ticket matching category=Billing AND priority=High AND search=prefix must remain visible'
+      ).toBe(true);
+      expect(
+        searchRows.some(
+          (r) => r.includes(categoryOnlySubject) || r.includes(priorityOnlySubject) || r.includes(neitherSubject)
+        ),
+        'search alone matches all four seeded subjects — the other three staying hidden proves search is ANDed with the still-active category+priority filters, not ORed'
+      ).toBe(false);
+
+      // ── Step 4: Clear filters must actually remove every param, not just
+      // reset the UI — proven by all four seeded tickets reappearing. ────
+      const clearButton = page.getByRole('button', { name: /Clear filters/i });
+      await expect(clearButton, 'Clear filters button should appear once filters are active').toBeVisible();
+      const [clearedResponse] = await Promise.all([
+        waitForFilteredTicketsResponse(page, {
+          absentParams: ['status', 'priority', 'category', 'search'],
+        }),
+        clearButton.click(),
+      ]);
+      const clearedParams = new URL(clearedResponse.url()).searchParams;
+      expect(clearedParams.has('category'), 'Clear filters must remove the category param entirely').toBe(false);
+      expect(clearedParams.has('priority'), 'Clear filters must remove the priority param entirely').toBe(false);
+      expect(clearedParams.has('search'), 'Clear filters must remove the search param entirely').toBe(false);
+
+      const clearedRows = await collectRowsUntilFound(
+        page,
+        [targetSubject, categoryOnlySubject, priorityOnlySubject, neitherSubject],
+        { waitForNextPage: () => waitForTicketsResponse(page) }
+      );
+      for (const subject of [targetSubject, categoryOnlySubject, priorityOnlySubject, neitherSubject]) {
+        expect(
+          clearedRows.some((r) => r.includes(subject)),
+          `"${subject}" must be visible again after Clear filters — proves the filters were actually turned off server-side, not just reset visually`
+        ).toBe(true);
+      }
     } finally {
       await deleteTicketsForStudentEmail(studentEmail);
     }

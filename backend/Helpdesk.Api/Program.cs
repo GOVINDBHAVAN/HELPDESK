@@ -217,22 +217,49 @@ app.MapGet("/api/me", (ClaimsPrincipal principal, HttpContext httpContext) =>
     });
 }).RequireAuthorization();
 
-app.MapGet("/api/tickets", async (HelpdeskDbContext db, string? sortBy, string? sortDir, int? page, int? pageSize) =>
+app.MapGet("/api/tickets", async (
+    HelpdeskDbContext db,
+    string? sortBy,
+    string? sortDir,
+    int? page,
+    int? pageSize,
+    string? status,
+    string? priority,
+    string? category,
+    string? search) =>
 {
     var descending = !string.Equals(sortDir, "asc", StringComparison.OrdinalIgnoreCase);
     var currentPage = page is > 0 ? page.Value : 1;
     var currentPageSize = pageSize is > 0 and <= 100 ? pageSize.Value : 10;
 
-    var totalCount = await db.Tickets.CountAsync();
+    IQueryable<Ticket> filteredTickets = db.Tickets;
+
+    if (!string.IsNullOrWhiteSpace(status) && Enum.TryParse<TicketStatus>(status, ignoreCase: true, out var statusValue))
+        filteredTickets = filteredTickets.Where(t => t.Status == statusValue);
+
+    if (!string.IsNullOrWhiteSpace(priority) && Enum.TryParse<TicketPriority>(priority, ignoreCase: true, out var priorityValue))
+        filteredTickets = filteredTickets.Where(t => t.Priority == priorityValue);
+
+    if (!string.IsNullOrWhiteSpace(category) && Enum.TryParse<TicketCategory>(category, ignoreCase: true, out var categoryValue))
+        filteredTickets = filteredTickets.Where(t => t.Category == categoryValue);
+
+    if (!string.IsNullOrWhiteSpace(search))
+    {
+        var pattern = $"%{search}%";
+        filteredTickets = filteredTickets.Where(t =>
+            EF.Functions.ILike(t.Subject, pattern) || EF.Functions.ILike(t.StudentEmail, pattern));
+    }
+
+    var totalCount = await filteredTickets.CountAsync();
 
     IQueryable<Ticket> sortedTickets = sortBy?.ToLowerInvariant() switch
     {
-        "subject" => descending ? db.Tickets.OrderByDescending(t => t.Subject) : db.Tickets.OrderBy(t => t.Subject),
-        "studentemail" => descending ? db.Tickets.OrderByDescending(t => t.StudentEmail) : db.Tickets.OrderBy(t => t.StudentEmail),
-        "status" => descending ? db.Tickets.OrderByDescending(t => t.Status) : db.Tickets.OrderBy(t => t.Status),
-        "priority" => descending ? db.Tickets.OrderByDescending(t => t.Priority) : db.Tickets.OrderBy(t => t.Priority),
-        "category" => descending ? db.Tickets.OrderByDescending(t => t.Category) : db.Tickets.OrderBy(t => t.Category),
-        _ => descending ? db.Tickets.OrderByDescending(t => t.CreatedAt) : db.Tickets.OrderBy(t => t.CreatedAt),
+        "subject" => descending ? filteredTickets.OrderByDescending(t => t.Subject) : filteredTickets.OrderBy(t => t.Subject),
+        "studentemail" => descending ? filteredTickets.OrderByDescending(t => t.StudentEmail) : filteredTickets.OrderBy(t => t.StudentEmail),
+        "status" => descending ? filteredTickets.OrderByDescending(t => t.Status) : filteredTickets.OrderBy(t => t.Status),
+        "priority" => descending ? filteredTickets.OrderByDescending(t => t.Priority) : filteredTickets.OrderBy(t => t.Priority),
+        "category" => descending ? filteredTickets.OrderByDescending(t => t.Category) : filteredTickets.OrderBy(t => t.Category),
+        _ => descending ? filteredTickets.OrderByDescending(t => t.CreatedAt) : filteredTickets.OrderBy(t => t.CreatedAt),
     };
 
     var tickets = await sortedTickets

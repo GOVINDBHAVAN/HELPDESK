@@ -95,7 +95,12 @@
       "Bash(curl -sf http://localhost:5173)",
       "Bash(node verify-layout.tmp.mjs)",
       "Bash(node verify-layout-small.tmp.mjs)",
-      "Bash(git -C \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\" status --short)"
+      "Bash(git -C \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\" status --short)",
+      "Bash(npx shadcn@latest add select)",
+      "Bash(mv \"@/components/ui/select.tsx\" \"src/components/ui/select.tsx\")",
+      "Bash(rm -rf \"@\")",
+      "Bash(node verify-filtering.tmp.mjs)",
+      "Bash(rm -f \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\e2e\\\\verify-filtering.tmp.mjs\" \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\e2e\\\\filter-\"*.png)"
     ],
     "additionalDirectories": [
       "D:\\Practice\\claude-code\\mosh\\HELPDESK\\e2e"

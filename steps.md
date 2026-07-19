@@ -168,4 +168,4 @@
 - # to implement sorting, we'll use TanStack Table (headless, sorting, filter and pagination), in this application sorting to happen on server.
 - add sorting to tickets table using tanstack table. Sorting should happen on the server.
 - Create 100 tickets using real-life examples. Diversify them so we can see sorting and filtering.
-- 
+- add filtering

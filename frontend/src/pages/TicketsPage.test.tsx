@@ -33,6 +33,18 @@ function pagedResponse(items: TicketRow[], overrides: { totalCount?: number; pag
   }
 }
 
+function makeTicket(id: number): TicketRow {
+  return {
+    id,
+    subject: `Ticket ${id}`,
+    status: 'Open',
+    priority: 'Medium',
+    category: 'General',
+    studentEmail: `student${id}@example.com`,
+    createdAt: '2026-07-18T10:00:00Z',
+  }
+}
+
 beforeEach(() => {
   vi.resetAllMocks()
 })
@@ -217,18 +229,6 @@ describe('TicketsPage', () => {
   })
 
   describe('pagination', () => {
-    function makeTicket(id: number): TicketRow {
-      return {
-        id,
-        subject: `Ticket ${id}`,
-        status: 'Open',
-        priority: 'Medium',
-        category: 'General',
-        studentEmail: `student${id}@example.com`,
-        createdAt: '2026-07-18T10:00:00Z',
-      }
-    }
-
     it('shows the total count and current range', async () => {
       mockedGet.mockResolvedValue(
         pagedResponse([makeTicket(1), makeTicket(2)], { totalCount: 42 })
@@ -303,6 +303,117 @@ describe('TicketsPage', () => {
           params: { sortBy: 'subject', sortDir: 'asc', page: 1, pageSize: 10 },
         })
       )
+    })
+  })
+
+  describe('filtering', () => {
+    it('does not show a Clear filters button by default', async () => {
+      mockedGet.mockResolvedValue(pagedResponse([makeTicket(1)], { totalCount: 20 }))
+
+      renderWithProviders(<TicketsPage />)
+      await screen.findByText(/Page 1 of/)
+
+      expect(screen.queryByRole('button', { name: /Clear filters/i })).not.toBeInTheDocument()
+    })
+
+    it('sends the status param and resets to page 1 when a status is selected', async () => {
+      const user = userEvent.setup()
+      mockedGet.mockResolvedValue(pagedResponse([makeTicket(1)], { totalCount: 20 }))
+
+      renderWithProviders(<TicketsPage />)
+      await screen.findByText(/Page 1 of/)
+      mockedGet.mockClear()
+
+      await user.click(screen.getByRole('combobox', { name: 'Filter by status' }))
+      await user.click(await screen.findByRole('option', { name: 'Open' }))
+
+      await waitFor(() =>
+        expect(mockedGet).toHaveBeenCalledWith('/tickets', {
+          params: { sortBy: 'createdAt', sortDir: 'desc', page: 1, pageSize: 10, status: 'Open' },
+        })
+      )
+      expect(screen.getByRole('button', { name: /Clear filters/i })).toBeInTheDocument()
+    })
+
+    it('sends the priority param when a priority is selected', async () => {
+      const user = userEvent.setup()
+      mockedGet.mockResolvedValue(pagedResponse([makeTicket(1)], { totalCount: 20 }))
+
+      renderWithProviders(<TicketsPage />)
+      await screen.findByText(/Page 1 of/)
+      mockedGet.mockClear()
+
+      await user.click(screen.getByRole('combobox', { name: 'Filter by priority' }))
+      await user.click(await screen.findByRole('option', { name: 'High' }))
+
+      await waitFor(() =>
+        expect(mockedGet).toHaveBeenCalledWith('/tickets', {
+          params: { sortBy: 'createdAt', sortDir: 'desc', page: 1, pageSize: 10, priority: 'High' },
+        })
+      )
+    })
+
+    it('sends the category param when a category is selected', async () => {
+      const user = userEvent.setup()
+      mockedGet.mockResolvedValue(pagedResponse([makeTicket(1)], { totalCount: 20 }))
+
+      renderWithProviders(<TicketsPage />)
+      await screen.findByText(/Page 1 of/)
+      mockedGet.mockClear()
+
+      await user.click(screen.getByRole('combobox', { name: 'Filter by category' }))
+      await user.click(await screen.findByRole('option', { name: 'Billing' }))
+
+      await waitFor(() =>
+        expect(mockedGet).toHaveBeenCalledWith('/tickets', {
+          params: { sortBy: 'createdAt', sortDir: 'desc', page: 1, pageSize: 10, category: 'Billing' },
+        })
+      )
+    })
+
+    it('debounces search input and sends the search param', async () => {
+      const user = userEvent.setup()
+      mockedGet.mockResolvedValue(pagedResponse([makeTicket(1)], { totalCount: 20 }))
+
+      renderWithProviders(<TicketsPage />)
+      await screen.findByText(/Page 1 of/)
+      mockedGet.mockClear()
+
+      await user.type(screen.getByPlaceholderText(/Search subject or student email/i), 'refund')
+
+      // Debounced - no request should fire immediately after typing.
+      expect(mockedGet).not.toHaveBeenCalled()
+
+      await waitFor(
+        () =>
+          expect(mockedGet).toHaveBeenCalledWith('/tickets', {
+            params: { sortBy: 'createdAt', sortDir: 'desc', page: 1, pageSize: 10, search: 'refund' },
+          }),
+        { timeout: 2000 }
+      )
+    })
+
+    it('clears all filters and re-fetches unfiltered results when Clear filters is clicked', async () => {
+      const user = userEvent.setup()
+      mockedGet.mockResolvedValue(pagedResponse([makeTicket(1)], { totalCount: 20 }))
+
+      renderWithProviders(<TicketsPage />)
+      await screen.findByText(/Page 1 of/)
+
+      await user.click(screen.getByRole('combobox', { name: 'Filter by status' }))
+      await user.click(await screen.findByRole('option', { name: 'Open' }))
+      await screen.findByRole('button', { name: /Clear filters/i })
+
+      mockedGet.mockClear()
+
+      await user.click(screen.getByRole('button', { name: /Clear filters/i }))
+
+      await waitFor(() =>
+        expect(mockedGet).toHaveBeenCalledWith('/tickets', {
+          params: { sortBy: 'createdAt', sortDir: 'desc', page: 1, pageSize: 10 },
+        })
+      )
+      expect(screen.queryByRole('button', { name: /Clear filters/i })).not.toBeInTheDocument()
     })
   })
 })
