@@ -51,6 +51,14 @@ public class TicketResponse
     public DateTime UpdatedAt { get; set; }
 }
 
+public class PagedTicketsResponse
+{
+    public List<TicketResponse> Items { get; set; } = new();
+    public int TotalCount { get; set; }
+    public int Page { get; set; }
+    public int PageSize { get; set; }
+}
+
 public class UserResponse
 {
     public string Id { get; set; } = string.Empty;

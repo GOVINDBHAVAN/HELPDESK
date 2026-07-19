@@ -217,10 +217,27 @@ app.MapGet("/api/me", (ClaimsPrincipal principal, HttpContext httpContext) =>
     });
 }).RequireAuthorization();
 
-app.MapGet("/api/tickets", async (HelpdeskDbContext db) =>
+app.MapGet("/api/tickets", async (HelpdeskDbContext db, string? sortBy, string? sortDir, int? page, int? pageSize) =>
 {
-    var tickets = await db.Tickets
-        .OrderByDescending(t => t.CreatedAt)
+    var descending = !string.Equals(sortDir, "asc", StringComparison.OrdinalIgnoreCase);
+    var currentPage = page is > 0 ? page.Value : 1;
+    var currentPageSize = pageSize is > 0 and <= 100 ? pageSize.Value : 10;
+
+    var totalCount = await db.Tickets.CountAsync();
+
+    IQueryable<Ticket> sortedTickets = sortBy?.ToLowerInvariant() switch
+    {
+        "subject" => descending ? db.Tickets.OrderByDescending(t => t.Subject) : db.Tickets.OrderBy(t => t.Subject),
+        "studentemail" => descending ? db.Tickets.OrderByDescending(t => t.StudentEmail) : db.Tickets.OrderBy(t => t.StudentEmail),
+        "status" => descending ? db.Tickets.OrderByDescending(t => t.Status) : db.Tickets.OrderBy(t => t.Status),
+        "priority" => descending ? db.Tickets.OrderByDescending(t => t.Priority) : db.Tickets.OrderBy(t => t.Priority),
+        "category" => descending ? db.Tickets.OrderByDescending(t => t.Category) : db.Tickets.OrderBy(t => t.Category),
+        _ => descending ? db.Tickets.OrderByDescending(t => t.CreatedAt) : db.Tickets.OrderBy(t => t.CreatedAt),
+    };
+
+    var tickets = await sortedTickets
+        .Skip((currentPage - 1) * currentPageSize)
+        .Take(currentPageSize)
         .Select(t => new TicketResponse
         {
             Id = t.Id,
@@ -235,7 +252,13 @@ app.MapGet("/api/tickets", async (HelpdeskDbContext db) =>
         })
         .ToListAsync();
 
-    return Results.Ok(tickets);
+    return Results.Ok(new PagedTicketsResponse
+    {
+        Items = tickets,
+        TotalCount = totalCount,
+        Page = currentPage,
+        PageSize = currentPageSize
+    });
 }).RequireAuthorization();
 
 app.MapPost("/api/tickets", async (CreateTicketRequest request, HelpdeskDbContext db, ClaimsPrincipal user) =>

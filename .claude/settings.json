@@ -75,7 +75,27 @@
       "Bash(node _nav_check.js \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2I1YjcxNC00ZGM2LTQ4MjEtYjVhMC0xMGQzZjhmYWU0M2UiLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6IkFkbWluIiwiZXhwIjoxNzg0NDE4MTE4LCJpc3MiOiJIZWxwZGVzayIsImF1ZCI6IkhlbHBkZXNrIn0.eDGx-9KxVzJD1X4zHNa5XEbYDL864C0aCY1Wi2h3URE\")",
       "Bash(powershell -NonInteractive -Command \"Get-NetTCPConnection -LocalPort 5173,5000 -State Listen -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique\")",
       "Bash(powershell -NonInteractive -Command \"Stop-Process -Id 7388,21112 -Force -ErrorAction SilentlyContinue\")",
-      "Bash(powershell.exe -NoProfile -Command \"Test-NetConnection -ComputerName 127.0.0.1 -Port 5432 -InformationLevel Quiet\")"
+      "Bash(powershell.exe -NoProfile -Command \"Test-NetConnection -ComputerName 127.0.0.1 -Port 5432 -InformationLevel Quiet\")",
+      "Bash(npm install *)",
+      "Bash(npm ls *)",
+      "Bash(powershell -NonInteractive -Command \"Get-Service -Name '*postgres*' | Select-Object Name, Status\")",
+      "Bash(curl -s -i http://localhost:5000/api/health)",
+      "Bash(curl -s -i -X POST http://localhost:5000/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"agent@example.com\",\"password\":\"Password@123\"}')",
+      "Bash(curl -s http://localhost:5000/api/health)",
+      "Bash(node -e \"console.log\\(require.resolve\\('playwright'\\)\\)\")",
+      "Bash(node \"C:\\\\Users\\\\govin\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Practice-claude-code-mosh-HELPDESK\\\\430e7a0a-4386-484d-9e5c-bcc0d219196f\\\\scratchpad\\\\verify-pagination.mjs\")",
+      "Bash(cp \"C:\\\\Users\\\\govin\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Practice-claude-code-mosh-HELPDESK\\\\430e7a0a-4386-484d-9e5c-bcc0d219196f\\\\scratchpad\\\\verify-pagination.mjs\" \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\\\\e2e\\\\verify-pagination.tmp.mjs\")",
+      "Bash(node verify-pagination.tmp.mjs)",
+      "Bash(git -C \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\" status --short e2e)",
+      "Bash(node -e ' *)",
+      "Bash(tasklist //FI \"PID eq 19368\")",
+      "Bash(taskkill //PID 19368 //F)",
+      "Bash(curl -sf http://localhost:5000/api/health)",
+      "Bash(break)",
+      "Bash(curl -sf http://localhost:5173)",
+      "Bash(node verify-layout.tmp.mjs)",
+      "Bash(node verify-layout-small.tmp.mjs)",
+      "Bash(git -C \"d:\\\\Practice\\\\claude-code\\\\mosh\\\\HELPDESK\" status --short)"
     ],
     "additionalDirectories": [
       "D:\\Practice\\claude-code\\mosh\\HELPDESK\\e2e"

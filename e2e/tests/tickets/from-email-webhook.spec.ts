@@ -27,6 +27,15 @@
  *    so "was the ticket really persisted" is cross-checked via
  *    GET /api/tickets using an Agent bearer token (fetchToken from
  *    fixtures/auth.ts), not just by trusting the webhook's own response echo.
+ *  - GET /api/tickets is paginated (2026-07-19: `page`/`pageSize` params,
+ *    response shape `{ items, totalCount, page, pageSize }` — see
+ *    ticket-list.spec.ts's header comment for the full change). This spec
+ *    only cares about "does my one seeded ticket exist", so
+ *    getTicketsForStudentEmail() below requests the max allowed pageSize
+ *    (100, Program.cs's cap) rather than filtering server-side (no
+ *    studentEmail query param exists) — cheap insurance against this spec's
+ *    1-2 seeded tickets landing past page 1 of the default pageSize (10) on
+ *    a `helpdesk_test` DB shared with other parallel tests/spec files.
  *  - The product has NO PATCH/PUT endpoint to change a ticket's status and
  *    NO DELETE /api/tickets/{id} endpoint. fixtures/db.ts talks to Postgres
  *    directly (mirroring global-setup.ts's connection handling) to force a
@@ -60,9 +69,12 @@ async function getTicketsForStudentEmail(
 ): Promise<TicketResponseBody[]> {
   const res = await request.get(`${API_BASE}/api/tickets`, {
     headers: { Authorization: `Bearer ${agentToken}` },
+    // pageSize=100 (Program.cs's max) so this spec's 1-2 seeded tickets are
+    // never pushed past the response by the default pageSize of 10.
+    params: { pageSize: 100 },
   });
-  const tickets = (await res.json()) as TicketResponseBody[];
-  return tickets.filter((t) => t.studentEmail === email);
+  const body = (await res.json()) as { items: TicketResponseBody[] };
+  return body.items.filter((t) => t.studentEmail === email);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
